@@ -20,7 +20,7 @@ int main()
         } };
 
     Camera cam;
-    cam.update({ 2, 2, 4 }, {0.5, 0.5, 0.5});
+    cam.update({ 2, 1.5, 3 }, {0.5, 0.5, 0.5});
 
     while (window.isOpen())
     {
