@@ -4,7 +4,7 @@
 Vector<3> operator*(Vector<3> x, Vector<3> y) {
 	Vector<3> p;
 	p[0] = x[1] * y[2] - x[2] * y[1];
-	p[1] = x[2] * y[0] - x[0] * y[0];
+	p[1] = x[2] * y[0] - x[0] * y[2];
 	p[2] = x[0] * y[1] - x[1] * y[0];
 	return p;
 }
@@ -36,10 +36,10 @@ Mat4 getTranslateMatrix(Vector<3> t) {
 		});
 }
 
-Mat4 getTransformMatrix(Vector<3> a, Vector<3> b, Vector<3> c) {
-	return(Mat4{
-		a[0], b[0], c[0], 0,
-		a[1], b[1], c[1], 0,
-		a[2], b[2], c[2], 1
+Mat3 getTransformMatrix(Vector<3> a, Vector<3> b, Vector<3> c) {
+	return(Mat3{
+		a[0], b[0], c[0],
+		a[1], b[1], c[1],
+		a[2], b[2], c[2]
 		});
 }

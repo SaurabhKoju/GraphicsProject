@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 template <int m, int n>
 void Matrix<m, n>::display() {
 	for (int i = 0; i < m; i++) {
@@ -22,6 +23,41 @@ Matrix<m, n> operator*(Matrix<m, o> x, Matrix<o, n> y) {
 			ans.matrix[i][j] = term;
 		}
 	}
+	return ans;
+}
+
+template <int n>
+Matrix<n, n> inverse(Matrix <n, n> A) {
+	/*std::cout << "A:" << std::endl;
+	A.display();*/
+	Matrix<n, n> ans;
+	double a[n][2 * n];
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < 2 * n; j++) {
+			if (j < n)a[i][j] = A.matrix[i][j];
+			else if (j - n == i)a[i][j] = 1;
+			else a[i][j] = 0;
+		}
+	}
+	for (int j = 0; j < n; j++) {
+		if (fabs(a[j][j]) < 0.00001) {
+			std::cout << "Error" << std::endl;
+		}
+		for (int i = 0; i < n; i++) {
+			if (i == j)continue;
+			double ratio = a[i][j] / a[j][j];
+			for (int k = 0; k < 2 * n; k++) {
+				a[i][k] -= ratio * a[j][k];
+			}
+		}
+	}
+	for (int i = 0; i < n; i++) {
+		for (int j = n; j < 2 * n; j++) {
+			ans.matrix[i][j-n] = a[i][j] / a[i][i];
+		}
+	}
+	/*std::cout << "inverse is " << std::endl;
+	ans.display();*/
 	return ans;
 }
 

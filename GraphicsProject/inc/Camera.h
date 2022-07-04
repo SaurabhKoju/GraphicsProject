@@ -10,3 +10,5 @@ public:
 
 	void update(Vector<3> p, Vector<3> o);
 };
+
+Mat4 rotateCam(Camera cam);

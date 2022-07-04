@@ -4,9 +4,9 @@
 
 void draw(mesh M, sf::RenderWindow &window, Camera cam) {
 	Mat4 compressx = getScaleMatrix(Vec3{ aspect_ratio, 1, 1});
-	Mat4 translateCamera = getTranslateMatrix(Vec3{ 0,0,0 }-cam.position);
-	Mat4 rotateCamera = getTransformMatrix(cam.right, cam.down, cam.look);
-	Mat4 Transform = rotateCamera * translateCamera * compressx;
+	Mat4 translateCam = getTranslateMatrix(Vec3{ 0, 0, 0 } - cam.position);
+	Mat4 camTransform = rotateCam(cam);
+	Mat4 Transform = compressx*camTransform * translateCam;
 	for (const triangle &t : M.triangles) {
 		sf::VertexArray drawt(sf::Triangles, 3);
 
