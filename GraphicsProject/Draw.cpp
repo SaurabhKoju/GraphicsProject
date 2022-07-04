@@ -7,12 +7,13 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam) {
 	Mat4 translateCam = getTranslateMatrix(Vec3{ 0, 0, 0 } - cam.position);
 	Mat4 camTransform = rotateCam(cam);
 	Mat4 Transform = compressx * camTransform * translateCam;
-	for (const triangle &t : M.triangles) {
+	for (triangle t : M.triangles) {
 		Vec4 v1 = t.p2 - t.p1;
 		Vec4 v2 = t.p3 - t.p2;
 		Vec3 cross_product = v1 * v2;
 
-		if (dot(cross_product, cam.look) > 0)continue;
+		//std::cout << dot(cross_product, cam.look) << std::endl;
+		if (dot(cross_product, Vec3{t.p1[0], t.p1[1], t.p1[2]} - cam.position) > 0)continue;
 
 
 		Vector<2> pp1 = get2d(Transform*t.p1);

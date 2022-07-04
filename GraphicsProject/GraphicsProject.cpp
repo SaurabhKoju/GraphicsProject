@@ -3,12 +3,13 @@
 #include "Projection.h"
 #include "Draw.h"
 #include "Camera.h"
+#include "Primitives.h"
 #include <iostream>
 
 
 int main()
 {
-    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "My window");
+    sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Cube");
 
     mesh Cube{ { 
                 {{0, 0, 0, 1}, {1, 0, 0, 1}, {1, 0, 1, 1}}, {{0, 0, 1, 1}, {0, 0, 0, 1}, {1, 0, 1, 1}},
@@ -21,6 +22,7 @@ int main()
 
     Camera cam;
     cam.update({ 2, 1.5, 3 }, {0.5, 0.5, 0.5});
+    Cube.transform(rotateAboutZ(120));
 
     sf::Clock clock;
 
