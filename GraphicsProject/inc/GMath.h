@@ -27,6 +27,7 @@ template <int n>
 Vector<n> operator*(Matrix<n, n>, Vector<n>);
 
 Vector<3> operator*(Vector<3>, Vector<3>);
+Vector<3> operator*(Vector<4>, Vector<4>);
 
 template <int n>
 Vector<n> operator-(Vector<n>, Vector<n>);
@@ -47,5 +48,6 @@ typedef Vector<4> Vec4;
 Mat4 getScaleMatrix(Vector<3> s);
 Mat4 getTranslateMatrix(Vector<3> t);
 Mat3 getTransformMatrix(Vector<3> a, Vector<3> b, Vector<3> c);
+//Mat4 getRotationMatrix(Vector<3> v, float angle); //angle in degrees
 
 #include "GMath.inl"

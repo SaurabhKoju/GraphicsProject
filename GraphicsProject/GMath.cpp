@@ -9,6 +9,14 @@ Vector<3> operator*(Vector<3> x, Vector<3> y) {
 	return p;
 }
 
+Vector<3> operator*(Vector<4> x, Vector<4> y) {
+	Vector<3> p;
+	p[0] = x[1] * y[2] - x[2] * y[1];
+	p[1] = x[2] * y[0] - x[0] * y[2];
+	p[2] = x[0] * y[1] - x[1] * y[0];
+	return p;
+}
+
 float dot(Vector<3> x, Vector<3> y) {
 	return(x[0] * y[0] + x[1] * y[1] + x[2] * y[2]);
 }
@@ -43,3 +51,8 @@ Mat3 getTransformMatrix(Vector<3> a, Vector<3> b, Vector<3> c) {
 		a[2], b[2], c[2]
 		});
 }
+
+//Mat4 getRotationMatrix(Vec3 v, float angle) {
+//	Mat4 ans;
+//	return ans;
+//}

@@ -10,6 +10,12 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam) {
 	for (const triangle &t : M.triangles) {
 		sf::VertexArray drawt(sf::Triangles, 3);
 
+		Vec4 v1 = t.p2 - t.p1;
+		Vec4 v2 = t.p3 - t.p2;
+		Vec3 cross_product = v1 * v2;
+
+		if (dot(cross_product, cam.look) > 0)continue;
+
 
 		Vector<2> pp1 = get2d(Transform*t.p1);
 		Vector<2> pp2 = get2d(Transform*t.p2);
