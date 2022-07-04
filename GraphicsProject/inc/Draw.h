@@ -2,7 +2,11 @@
 #include "GMath.h"
 #include <SFML/Graphics.hpp>
 #include "Projection.h"
+#include "Camera.h"
+#define SCREEN_WIDTH 1920
+#define SCREEN_HEIGHT 1080
+const float aspect_ratio = float(SCREEN_HEIGHT) / SCREEN_WIDTH;
 
 
 void drawline(Vector<2> p1, Vector<2> p2, sf::RenderWindow &window);
-void draw(mesh M, sf::RenderWindow &window);
+void draw(mesh M, sf::RenderWindow &window, Camera cam);

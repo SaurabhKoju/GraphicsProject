@@ -1,14 +1,19 @@
 #include "Draw.h"
-#define SCREEN_WIDTH 800
-#define SCREEN_HEIGHT 600
+#include <iostream>
 
-void draw(mesh M, sf::RenderWindow &window) {
+
+void draw(mesh M, sf::RenderWindow &window, Camera cam) {
+	Mat4 compressx = getScaleMatrix(Vec3{ aspect_ratio, 1, 1});
+	Mat4 translateCamera = getTranslateMatrix(Vec3{ 0,0,0 }-cam.position);
+	Mat4 rotateCamera = getTransformMatrix(cam.right, cam.down, cam.look);
+	Mat4 Transform = rotateCamera * translateCamera * compressx;
 	for (const triangle &t : M.triangles) {
 		sf::VertexArray drawt(sf::Triangles, 3);
 
-		Vector<2> pp1 = get2d(t.p1);
-		Vector<2> pp2 = get2d(t.p2);
-		Vector<2> pp3 = get2d(t.p3);
+
+		Vector<2> pp1 = get2d(Transform*t.p1);
+		Vector<2> pp2 = get2d(Transform*t.p2);
+		Vector<2> pp3 = get2d(Transform*t.p3);
 		drawline(pp1, pp2, window);
 		drawline(pp2, pp3, window);
 		drawline(pp3, pp1, window);

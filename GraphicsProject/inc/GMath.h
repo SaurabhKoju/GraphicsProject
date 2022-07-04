@@ -32,9 +32,15 @@ float dot(Vector<3> x, Vector<3> y);
 Vector<3> normalize(Vector<3> x);
 
 
+
 typedef Matrix<3, 3> Mat3;
 typedef Matrix<4, 4> Mat4;
 typedef Vector<3> Vec3;
 typedef Vector<4> Vec4;
+
+
+Mat4 getScaleMatrix(Vector<3> s);
+Mat4 getTranslateMatrix(Vector<3> t);
+Mat4 getTransformMatrix(Vector<3> a, Vector<3> b, Vector<3> c);
 
 #include "GMath.inl"

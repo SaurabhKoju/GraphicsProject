@@ -38,10 +38,10 @@
     <ClInclude Include="inc\Projection.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Draw.h">
+    <ClInclude Include="inc\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Camera.h">
+    <ClInclude Include="inc\Draw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
