@@ -146,6 +146,7 @@
     <ClCompile Include="Draw.cpp" />
     <ClCompile Include="GMath.cpp" />
     <ClCompile Include="GraphicsProject.cpp" />
+    <ClCompile Include="primitives.cpp" />
     <ClCompile Include="Projection.cpp" />
     <ClCompile Include="Camera.cpp" />
   </ItemGroup>
@@ -154,6 +155,7 @@
     <ClInclude Include="inc\Draw.h" />
     <ClInclude Include="inc\GMath.h" />
     <ClInclude Include="inc\Projection.h" />
+    <ClInclude Include="Primitives.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="inc\GMath.inl" />

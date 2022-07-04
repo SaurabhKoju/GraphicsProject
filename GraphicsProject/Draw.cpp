@@ -6,10 +6,8 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam) {
 	Mat4 compressx = getScaleMatrix(Vec3{ aspect_ratio, 1, 1});
 	Mat4 translateCam = getTranslateMatrix(Vec3{ 0, 0, 0 } - cam.position);
 	Mat4 camTransform = rotateCam(cam);
-	Mat4 Transform = compressx*camTransform * translateCam;
+	Mat4 Transform = compressx * camTransform * translateCam;
 	for (const triangle &t : M.triangles) {
-		sf::VertexArray drawt(sf::Triangles, 3);
-
 		Vec4 v1 = t.p2 - t.p1;
 		Vec4 v2 = t.p3 - t.p2;
 		Vec3 cross_product = v1 * v2;

@@ -22,6 +22,8 @@ int main()
     Camera cam;
     cam.update({ 2, 1.5, 3 }, {0.5, 0.5, 0.5});
 
+    sf::Clock clock;
+
     while (window.isOpen())
     {
         sf::Event event;
@@ -33,6 +35,10 @@ int main()
         window.clear(sf::Color::Black);
 
         // draw everything here...
+        sf::Time elapsed = clock.getElapsedTime();
+        float t = elapsed.asSeconds();
+        clock.restart();
+        Cube.transform(rotateAboutZ(180 * t));
         draw(Cube, window, cam);
 
         // end the current frame

@@ -48,6 +48,7 @@ typedef Vector<4> Vec4;
 Mat4 getScaleMatrix(Vector<3> s);
 Mat4 getTranslateMatrix(Vector<3> t);
 Mat3 getTransformMatrix(Vector<3> a, Vector<3> b, Vector<3> c);
-//Mat4 getRotationMatrix(Vector<3> v, float angle); //angle in degrees
+Mat4 getRotationMatrix(Vector<3> v, float angle); //angle in degrees
+Mat4 rotateAboutZ(float angle);
 
 #include "GMath.inl"

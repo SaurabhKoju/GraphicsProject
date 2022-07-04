@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "Projection.h"
 #include "Camera.h"
+#include "primitives.h"
 #define SCREEN_WIDTH 1280
 #define SCREEN_HEIGHT 720
 const float aspect_ratio = float(SCREEN_HEIGHT) / SCREEN_WIDTH;

@@ -1,5 +1,6 @@
 #include "GMath.h"
 #include <cmath>
+const double pi = 3.141592654;
 
 Vector<3> operator*(Vector<3> x, Vector<3> y) {
 	Vector<3> p;
@@ -49,6 +50,16 @@ Mat3 getTransformMatrix(Vector<3> a, Vector<3> b, Vector<3> c) {
 		a[0], b[0], c[0],
 		a[1], b[1], c[1],
 		a[2], b[2], c[2]
+		});
+}
+
+Mat4 rotateAboutZ(float angle) {
+	angle *= pi/180;
+	return(Mat4{
+		cos(angle), -sin(angle), 0, 0,
+		sin(angle), cos(angle), 0, 0,
+		0, 0, 1, 0,
+		0, 0, 0, 1
 		});
 }
 
