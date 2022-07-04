@@ -10,6 +10,7 @@
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Cube");
+    window.setFramerateLimit(60);
 
     mesh Cube{ { 
                 {{0, 0, 0, 1}, {1, 0, 0, 1}, {1, 0, 1, 1}}, {{0, 0, 1, 1}, {0, 0, 0, 1}, {1, 0, 1, 1}},
@@ -22,7 +23,7 @@ int main()
 
     Camera cam;
     cam.update({ 2, 1.5, 3 }, {0.5, 0.5, 0.5});
-    Cube.transform(rotateAboutZ(120));
+    //Cube.transform(rotateAboutZ(120));
 
     sf::Clock clock;
 
@@ -40,7 +41,9 @@ int main()
         sf::Time elapsed = clock.getElapsedTime();
         float t = elapsed.asSeconds();
         clock.restart();
-        Cube.transform(rotateAboutZ(180 * t));
+        Mat4 T = getRotationMatrix(Vec3{ 0.5, 0.5, 0.5 }, Vec3{ 0.5, 0, 0.5 }, 180 * t);
+        Cube.transform(T);
+        //Cube.transform(rotateAboutY(90 * t));
         draw(Cube, window, cam);
 
         // end the current frame

@@ -12,7 +12,6 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam) {
 		Vec4 v2 = t.p3 - t.p2;
 		Vec3 cross_product = v1 * v2;
 
-		//std::cout << dot(cross_product, cam.look) << std::endl;
 		if (dot(cross_product, Vec3{t.p1[0], t.p1[1], t.p1[2]} - cam.position) > 0)continue;
 
 
