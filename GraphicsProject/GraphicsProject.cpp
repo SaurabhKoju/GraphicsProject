@@ -21,7 +21,17 @@ int main()
                 {{0, 0, 1, 1}, {1, 0, 1, 1}, {1, 1, 1, 1}}, {{0, 0, 1, 1}, {1, 1, 1, 1}, {0, 1, 1, 1}}
         } };
 
+    Cube.triangles[0].fillColor = sf::Color::Green; Cube.triangles[1].fillColor = sf::Color::Green;
+    Cube.triangles[2].fillColor = sf::Color::Blue; Cube.triangles[3].fillColor = sf::Color::Blue;
+    Cube.triangles[4].fillColor = sf::Color::Yellow; Cube.triangles[5].fillColor = sf::Color::Yellow;
+    Cube.triangles[6].fillColor = sf::Color::White; Cube.triangles[7].fillColor = sf::Color::White;
+    Cube.triangles[8].fillColor = sf::Color(255, 87, 51); Cube.triangles[9].fillColor = sf::Color(255, 87, 51);
+    Cube.triangles[10].fillColor = sf::Color::Red; Cube.triangles[11].fillColor = sf::Color::Red;
+
+
+
     Camera cam;
+    Vec4 target = { 0.5, 0.5, 0.5 , 1};
     cam.update({ 2, 1.5, 3 }, {0.5, 0.5, 0.5});
     //Cube.transform(rotateAboutZ(120));
 
@@ -41,9 +51,12 @@ int main()
         sf::Time elapsed = clock.getElapsedTime();
         float t = elapsed.asSeconds();
         clock.restart();
-        Mat4 T = getRotationMatrix(Vec3{ 0.5, 0.5, 0.5 }, Vec3{ 0.5, 0, 0.5 }, 180 * t);
+        Mat4 T = getRotationMatrix(Vec3{ 0.5, 0.5, 0.5 }, Vec3{ 2, 1.5, 3 }, 180 * t);
+        //Mat4 T = rotateAboutZ(180 * t);
         Cube.transform(T);
         //Cube.transform(rotateAboutY(90 * t));
+        //target = getRotationMatrix(cam.position, cam.down, 10 * t)*target;
+        //cam.update(cam.position, Vec3{target[0], target[1], target[2]});
         draw(Cube, window, cam);
 
         // end the current frame

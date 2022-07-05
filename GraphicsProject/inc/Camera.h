@@ -8,7 +8,7 @@ public:
 	Vector<3> right;
 	Vector<3> look;
 
-	void update(Vector<3> p, Vector<3> o);
+	void update(Vector<3> cameraPosition, Vector<3> targetPosition);
 };
 
 Mat4 rotateCam(Camera cam);

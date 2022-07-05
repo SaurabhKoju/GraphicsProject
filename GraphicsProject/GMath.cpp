@@ -120,8 +120,8 @@ Mat4 getRotationMatrix(Vec3 tail, Vec3 head, float angle) {
 	}
 	float Xanglecosine = v[1] / sqrt(v[1]*v[1] + v[2]*v[2]);
 	float Xanglesine = v[2] / sqrt(v[1]*v[1] + v[2]*v[2]);
-	Mat4 Xrotate = rotateAboutX(Xanglecosine, Xanglesine);
-	Mat4 Xantirotate = rotateAboutX(Xanglecosine, -Xanglesine);
+	Mat4 Xrotate = rotateAboutX(Xanglecosine, -Xanglesine);
+	Mat4 Xantirotate = rotateAboutX(Xanglecosine, Xanglesine);
 	float Zanglecosine = v[0] / sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
 	float Zanglesine = sqrt(v[1]*v[1] + v[2]*v[2]) / sqrt(v[0]*v[0] + v[1]*v[1] + v[2]*v[2]);
 	Mat4 Zrotate = rotateAboutZ(Zanglecosine, -Zanglesine);
