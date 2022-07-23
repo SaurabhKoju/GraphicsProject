@@ -32,7 +32,7 @@ int main()
     Camera cam;
     //Vec4 target = { 0.5, 0.5, 0.5 , 1};
     cam.update({ 2.5, 2.5, 2.5 }, {0.5, 0.5, 0.5});
-    Vec3 light = {2.5, 2.5, 2.5};
+    Vec3 light = {1.5, 0.5, 0.5};
 
     sf::Clock clock;
     float theta = 0;
@@ -67,23 +67,23 @@ int main()
                 else if(sf::Keyboard::isKeyPressed(sf::Keyboard::E))
                     theta -= 1;
                 else if(sf::Keyboard::isKeyPressed(sf::Keyboard::I))
-                    light[0] += 0.5;
+                    light[0] += 0.1;
                 else if(sf::Keyboard::isKeyPressed(sf::Keyboard::O))
-                    light[0] -= 0.5;
+                    light[0] -= 0.1;
                 else if(sf::Keyboard::isKeyPressed(sf::Keyboard::J))
-                    light[1] += 0.5;
+                    light[1] += 0.1;
                 else if(sf::Keyboard::isKeyPressed(sf::Keyboard::K))
-                    light[1] -= 0.5;
+                    light[1] -= 0.1;
                 else if(sf::Keyboard::isKeyPressed(sf::Keyboard::N))
-                    light[2] += 0.5;
+                    light[2] += 0.1;
                 else if(sf::Keyboard::isKeyPressed(sf::Keyboard::M))
-                    light[2] -= 0.5;
+                    light[2] -= 0.1;
             }
         }
         window.clear(sf::Color::Black);
 
         // draw everything here...
-       Mat4 T = getRotationMatrix(cam.target, cam.position, 5 * theta);
+        Mat4 T = getRotationMatrix(cam.target, cam.position, 5 * theta);
         Cube.transform(T);
 
         draw(Cube, window, cam, light);

@@ -21,6 +21,7 @@ public:
 	void display();
 	float& operator[](int i) {
 		return vector[i];
+	
 	}
 };
 template <int n>
@@ -28,6 +29,8 @@ Vector<n> operator*(Matrix<n, n>, Vector<n>);
 
 Vector<3> operator*(Vector<3>, Vector<3>);
 Vector<3> operator+(Vector<3>, Vector<3>);
+Vector<4> operator+(Vector<4>, Vector<4>);
+Vector<4> operator/(Vector<4>, float a);
 Vector<3> operator*(Vector<4>, Vector<4>);
 
 template <int n>

@@ -3,10 +3,17 @@
 #include <algorithm>
 #include <vector>
 
+float min(float x, float y){ return x < y ? x : y;}
+float max(float x, float y){ return x > y ? x : y;}
+
 sf::Color applyLighting(sf::Color c, float ambient, Vec3 normal, Vec3 light) {
-	float cosTheta = abs(dot(normalize(normal), normalize(light)));
-	return sf::Color((float)c.r * ambient * cosTheta, 
-		(float)c.g * ambient * cosTheta,(float)c.b * ambient * cosTheta,c.a);
+	float ka  = 1;
+	float cosTheta = max((dot(normalize(normal), normalize(light))), 0);
+	return sf::Color(
+			min((float)c.r * (ambient * ka + cosTheta), 255),
+			min((float)c.g * (ambient * ka + cosTheta), 255),
+			min((float)c.b * (ambient * ka + cosTheta), 255),
+			c.a);
 }
 
 void rasterize(triangle t, sf::RenderWindow &window, float ambient, Vec3 normal, Vec3 light) {
@@ -43,6 +50,7 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec3 light) {
 	Mat4 translateCam = getTranslateMatrix(Vec3{ 0, 0, 0 } - cam.position);
 	Mat4 camTransform = rotateCam(cam);
 	Mat4 Transform = compressx * camTransform * translateCam;
+
 	for (triangle t : M.triangles) {
 		Vec4 v1 = t.p1 - t.p0;
 		Vec4 v2 = t.p2 - t.p1;
@@ -58,21 +66,11 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec3 light) {
 		pp0 = maptoScreen * pp0;
 		pp1 = maptoScreen * pp1;
 		pp2 = maptoScreen * pp2;
-		
-		rasterize(triangle{ pp0, pp1, pp2, t.fillColor }, window, 0.2, cross_product, light);
-		/*
 
-		sf::VertexArray drawt(sf::Triangles, 3);
-		drawt[0].color = applyDiffuse(applyAmbient(t.fillColor, ambient), cross_product, light);
-		drawt[1].color = applyDiffuse(applyAmbient(t.fillColor, ambient), cross_product, light);
-		drawt[2].color = applyDiffuse(applyAmbient(t.fillColor, ambient), cross_product, light);
-
-		drawt[0].position = sf::Vector2f(pp1[0], pp1[1]);
-		drawt[1].position = sf::Vector2f(pp2[0], pp2[1]);
-		drawt[2].position = sf::Vector2f(pp3[0], pp3[1]);
+		Vec4 temp = (t.p1 + t.p2 + t.p0) / 3;
+		Vec3 surfaceCenter = {temp[0], temp[1], temp[2]};;
 		
-		 window.draw(drawt);
-		 */
+		rasterize(triangle{ pp0, pp1, pp2, t.fillColor }, window, 0.2, cross_product, {light - surfaceCenter});
 	}
 }
 

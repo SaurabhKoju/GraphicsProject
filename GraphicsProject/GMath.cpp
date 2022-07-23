@@ -16,6 +16,22 @@ Vec3 operator+(Vec3 x, Vec3 y) {
 	p[2] = x[2] + y[2];
 	return p;
 }
+Vec4 operator+(Vec4 x, Vec4 y) {
+	Vector<4> p;
+	p[0] = x[0] + y[0];
+	p[1] = x[1] + y[1];
+	p[2] = x[2] + y[2];
+	p[3] = x[3] + y[3];
+	return p;
+}
+Vec4 operator/(Vec4 x, float a) {
+	Vector<4> p;
+	p[0] = x[0] / a;
+	p[1] = x[1] / a;
+	p[2] = x[2] / a;
+	p[3] = x[3] / a;
+	return p;
+}
 
 Vector<3> operator*(Vector<4> x, Vector<4> y) {
 	Vector<3> p;
