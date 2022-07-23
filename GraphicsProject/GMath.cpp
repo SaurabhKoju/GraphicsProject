@@ -2,11 +2,18 @@
 #include <cmath>
 const double pi = 3.141592654;
 
-Vector<3> operator*(Vector<3> x, Vector<3> y) {
+Vec3 operator*(Vec3 x, Vec3 y) {
 	Vector<3> p;
 	p[0] = x[1] * y[2] - x[2] * y[1];
 	p[1] = x[2] * y[0] - x[0] * y[2];
 	p[2] = x[0] * y[1] - x[1] * y[0];
+	return p;
+}
+Vec3 operator+(Vec3 x, Vec3 y) {
+	Vector<3> p;
+	p[0] = x[0] + y[0];
+	p[1] = x[1] + y[1];
+	p[2] = x[2] + y[2];
 	return p;
 }
 
@@ -27,7 +34,7 @@ Vector<3> normalize(Vector<3> x) {
 	return(Vector<3>{ x[0] / m, x[1] / m, x[2] / m });
 }
 
-Mat4 getScaleMatrix(Vector<3> s) {
+Mat4 getScaleMatrix(Vec3 s) {
 	return(Mat4{
 		s[0], 0, 0, 0,
 		0, s[1], 0, 0,
@@ -36,7 +43,7 @@ Mat4 getScaleMatrix(Vector<3> s) {
 		});
 }
 
-Mat4 getTranslateMatrix(Vector<3> t) {
+Mat4 getTranslateMatrix(Vec3 t) {
 	return(Mat4{
 		1, 0, 0, t[0],
 		0, 1, 0, t[1],
@@ -45,7 +52,7 @@ Mat4 getTranslateMatrix(Vector<3> t) {
 		});
 }
 
-Mat3 getTransformMatrix(Vector<3> a, Vector<3> b, Vector<3> c) {
+Mat3 getTransformMatrix(Vec3 a, Vec3 b, Vec3 c) {
 	return(Mat3{
 		a[0], b[0], c[0],
 		a[1], b[1], c[1],
