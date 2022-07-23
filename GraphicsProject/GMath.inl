@@ -85,6 +85,25 @@ Vector<n> operator-(Vector<n> x, Vector<n> y) {
 }
 
 template <int n>
+Vector<n> operator+(Vector<n> x, Vector<n> y) {
+	Vector<n> ans;
+	for (int i = 0; i < n; i++) {
+		ans[i] = x[i] + y[i];
+	}
+	return ans;
+}
+
+
+template <int n>
+Vector<n> operator*(float s, Vector<n> x) {
+	Vector<n> ans;
+	for (int i = 0; i < n; i++) {
+		ans[i] = s*x[i];
+	}
+	return ans;
+}
+
+template <int n>
 Vector<n> scale(Vector<n> x, Vector<n> y) {
 	Vector<n> ans;
 	for (int i = 0; i < n; i++) {
