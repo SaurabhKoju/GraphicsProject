@@ -149,6 +149,7 @@
     <ClCompile Include="Draw.cpp" />
     <ClCompile Include="GMath.cpp" />
     <ClCompile Include="GraphicsProject.cpp" />
+    <ClCompile Include="ObjectLoader.cpp" />
     <ClCompile Include="primitives.cpp" />
     <ClCompile Include="Projection.cpp" />
     <ClCompile Include="Camera.cpp" />

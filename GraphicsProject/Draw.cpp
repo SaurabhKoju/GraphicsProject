@@ -11,7 +11,7 @@ float max(float x, float y){ return x > y ? x : y;}
 sf::Color applyLighting(sf::Color c, float ambient, Vec3 normal, Vec3 light) {
 
 	float ka  = 1;
-	float cosTheta = max((dot(normalize(normal), normalize(light))), 0);
+	float cosTheta = max((dot(normalize(normal), normalize(light))), 0)/magnitudeSquared(light);
 	return sf::Color(
 			min((float)c.r * (ambient * ka + cosTheta), 255),
 			min((float)c.g * (ambient * ka + cosTheta), 255),
@@ -20,9 +20,6 @@ sf::Color applyLighting(sf::Color c, float ambient, Vec3 normal, Vec3 light) {
 
 }
 
-void rasterize(triangle t, sf::RenderWindow &window, float ambient, Vec3 normal, Vec3 light, std::vector<std::vector<float> >& zbuffer) {
-	
-}
 
 void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec3 light) {
 	std::vector<sf::Vertex> vertexarray;
@@ -96,7 +93,7 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec3 light) {
 				Vec4 temp = (t.p1 + t.p2 + t.p0) / 3;
 				Vec3 surfaceCenter = {temp[0], temp[1], temp[2]};
 				Vec4 vertexCoordinates = (l0 * t.p0 + l1 * t.p1 + l2 * t.p2);
-				sf::Color c = applyLighting(t.fillColor, 0.6, normal, light-Vec3{vertexCoordinates[0], vertexCoordinates[1], vertexCoordinates[2]});
+				sf::Color c = applyLighting(t.fillColor, 0.3, normal, light-Vec3{vertexCoordinates[0], vertexCoordinates[1], vertexCoordinates[2]});
 				vertexarray.push_back(sf::Vertex{ sf::Vector2f{float(j), float(i)}, c });
 			}
 		}

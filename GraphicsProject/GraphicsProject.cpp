@@ -32,7 +32,7 @@ int main()
     Camera cam;
     //Vec4 target = { 0.5, 0.5, 0.5 , 1};
     cam.update({ 2.5, 2.5, 2.5 }, {0.5, 0.5, 0.5});
-    Vec3 light = {1.5, 0.5, 0.5};
+    Vec3 light = {1.2, 0.8, 1.4};
 
     sf::Clock clock;
     float theta = 0;

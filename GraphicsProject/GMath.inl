@@ -119,3 +119,12 @@ void Vector<n>::display() {
 	}
 	std::cout << std::endl;
 }
+
+template <int n>
+float magnitudeSquared(Vector<n> x) {
+	float ans = 0;
+	for (int i = 0; i < n; i++) {
+		ans += x[i] * x[i];
+	}
+	return ans;
+}
