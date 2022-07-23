@@ -2,6 +2,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+const float INF = 1000000000;
 
 sf::Color applyLighting(sf::Color c, float ambient, Vec3 normal, Vec3 light) {
 	float cosTheta = abs(dot(normalize(normal), normalize(light)));
@@ -9,36 +10,45 @@ sf::Color applyLighting(sf::Color c, float ambient, Vec3 normal, Vec3 light) {
 		(float)c.g * ambient * cosTheta,(float)c.b * ambient * cosTheta,c.a);
 }
 
-void rasterize(triangle t, sf::RenderWindow &window, float ambient, Vec3 normal, Vec3 light) {
+void rasterize(triangle t, sf::RenderWindow &window, float ambient, Vec3 normal, Vec3 light, std::vector<std::vector<float> >& zbuffer) {
 	std::vector<sf::Vertex> vertexarray;
-	vertexarray.push_back(sf::Vertex{ sf::Vector2f{1, 2} });
+	vertexarray.push_back(sf::Vertex{ sf::Vector2f{-1, -1} });
 	int xmin = std::min({ t.p0[0], t.p1[0], t.p2[0] });
 	int xmax = std::max({ t.p0[0], t.p1[0], t.p2[0] });
 	int ymin = std::min({ t.p0[1], t.p1[1], t.p2[1] });
 	int ymax = std::max({ t.p0[1], t.p1[1], t.p2[1] });
 
+	Vec3 arean = (t.p1 - t.p0) * (t.p2 - t.p0);
 	for (int i = ymin; i <= ymax; i++) {
 		for (int j = xmin; j <= xmax; j++) {
 			Vec4 currentPoint = { (float)j, (float)i, 0 };
 			bool up1 = false, up2 = false, up3 = false;
-			Vec3 cp1 = (t.p1 - t.p0) * (currentPoint - t.p0);
-			Vec3 cp2 = (t.p2 - t.p1) * (currentPoint - t.p1);
-			Vec3 cp3 = (t.p0 - t.p2) * (currentPoint - t.p2);
-			if (cp1[2] >= 0)up1 = true;
-			if (cp2[2] >= 0)up2 = true;
-			if (cp3[2] >= 0)up3 = true;
+			Vec3 cp0 = (t.p1 - t.p0) * (currentPoint - t.p0);
+			Vec3 cp1 = (t.p2 - t.p1) * (currentPoint - t.p1);
+			Vec3 cp2 = (t.p0 - t.p2) * (currentPoint - t.p2);
+			if (cp0[2] >= 0)up1 = true;
+			if (cp1[2] >= 0)up2 = true;
+			if (cp2[2] >= 0)up3 = true;
 
-			if (up1 == up2 && up2 == up3) {
-				sf::Color c = applyLighting(t.fillColor,ambient, normal, light);
-				vertexarray.push_back(sf::Vertex{ sf::Vector2f{float(j), float(i)}, c });
-			}
+			if (up1 != up2 || up2 != up3) continue;
+
+			float l2 = abs(cp0[2] / arean[2]);
+			float l0 = abs(cp1[2] / arean[2]);
+			float l1 = abs(cp2[2] / arean[2]);
+
+			float depth = l0 * t.p0[2] + l1 * t.p1[2] + l2 * t.p2[2];
+			if (depth >= zbuffer[i][j])continue;
+			zbuffer[i][j] = depth;
+			
+			sf::Color c = applyLighting(t.fillColor,ambient, normal, light);
+			vertexarray.push_back(sf::Vertex{ sf::Vector2f{float(j), float(i)}, c });
 		}
 	}
 	window.draw(&vertexarray[0], vertexarray.size(), sf::Points);
 }
 
 void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec3 light) {
-	//std::vector<std::vector<float> > zbuffer(SCREEN_HEIGHT, std::vector<float>(SCREEN_WIDTH));
+	std::vector<std::vector<float> > zbuffer(SCREEN_HEIGHT, std::vector<float>(SCREEN_WIDTH, INF));
 	Mat4 compressx = getScaleMatrix(Vec3{ aspect_ratio, 1, 1});
 	Mat4 translateCam = getTranslateMatrix(Vec3{ 0, 0, 0 } - cam.position);
 	Mat4 camTransform = rotateCam(cam);
@@ -59,7 +69,7 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec3 light) {
 		pp1 = maptoScreen * pp1;
 		pp2 = maptoScreen * pp2;
 		
-		rasterize(triangle{ pp0, pp1, pp2, t.fillColor }, window, 0.2, cross_product, light);
+		rasterize(triangle{ pp0, pp1, pp2, t.fillColor }, window, 1, cross_product, light, zbuffer);
 		/*
 
 		sf::VertexArray drawt(sf::Triangles, 3);

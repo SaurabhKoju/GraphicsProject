@@ -35,24 +35,24 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\GMath.h">
+    <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\Projection.h">
+    <ClInclude Include="Draw.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="inc\Camera.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="inc\Draw.h">
+    <ClInclude Include="GMath.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Primitives.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Projection.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="inc\GMath.inl">
+    <None Include="GMath.inl">
       <Filter>Header Files</Filter>
     </None>
   </ItemGroup>
