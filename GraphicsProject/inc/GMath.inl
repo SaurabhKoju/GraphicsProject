@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <cmath>
 template <int m, int n>
 void Matrix<m, n>::display() {
 	for (int i = 0; i < m; i++) {

@@ -7,7 +7,7 @@
 const float aspect_ratio = float(SCREEN_HEIGHT) / SCREEN_WIDTH;
 
 struct triangle {
-	Vector<4> p1, p2, p3, p4;
+	Vector<4> p0, p1, p2;
 	sf::Color fillColor;
 };
 

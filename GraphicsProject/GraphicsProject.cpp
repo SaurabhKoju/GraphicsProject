@@ -32,7 +32,7 @@ int main()
 
     Camera cam;
     Vec4 target = { 0.5, 0.5, 0.5 , 1};
-    cam.update({ 2, 1.5, 3 }, {0.5, 0.5, 0.5});
+    cam.update({ 2.5, 2.5, 2.5 }, {0.5, 0.5, 0.5});
     //Cube.transform(rotateAboutZ(120));
 
     sf::Clock clock;
@@ -51,12 +51,10 @@ int main()
         sf::Time elapsed = clock.getElapsedTime();
         float t = elapsed.asSeconds();
         clock.restart();
-        Mat4 T = getRotationMatrix(Vec3{ 0.5, 0.5, 0.5 }, Vec3{ 2, 1.5, 3 }, 180 * t);
-        //Mat4 T = rotateAboutZ(180 * t);
-        Cube.transform(T);
-        //Cube.transform(rotateAboutY(90 * t));
-        //target = getRotationMatrix(cam.position, cam.down, 10 * t)*target;
-        //cam.update(cam.position, Vec3{target[0], target[1], target[2]});
+        Mat4 T = getRotationMatrix(Vec3{ 0.5, 0.5, 0.5 }, Vec3{ 4, 6, 9}, 180 * t);
+        
+        
+        Cube.transform(T);        
         draw(Cube, window, cam);
 
         // end the current frame
