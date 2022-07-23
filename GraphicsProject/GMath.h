@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <cmath>
 
 template <int m, int n>
 class Matrix {
@@ -35,6 +36,10 @@ Vector<3> operator*(Vector<4>, Vector<4>);
 
 template <int n>
 Vector<n> operator-(Vector<n>, Vector<n>);
+template <int n>
+Vector<n> operator+(Vector<n>, Vector<n>);
+template <int n>
+Vector<n> operator*(float scalar, Vector<n>);
 
 float dot(Vector<3> x, Vector<3> y);
 Vector<3> normalize(Vector<3> x);
