@@ -154,14 +154,14 @@
     <ClCompile Include="Camera.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="inc\Camera.h" />
-    <ClInclude Include="inc\Draw.h" />
-    <ClInclude Include="inc\GMath.h" />
-    <ClInclude Include="inc\Projection.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="Draw.h" />
+    <ClInclude Include="GMath.h" />
     <ClInclude Include="Primitives.h" />
+    <ClInclude Include="Projection.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="inc\GMath.inl" />
+    <None Include="GMath.inl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

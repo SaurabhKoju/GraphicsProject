@@ -9,7 +9,7 @@ void Camera::update(Vec3 cameraPosition, Vec3 targetPosition) {
 	down = look * right;
 }
 
-float Camera::speed = 2;
+float Camera::speed = 4;
 
 void Camera::ZoomIn(float time) {
 	Vec3 v = scale(normalize(this->look), {speed * time, speed * time, speed * time});
