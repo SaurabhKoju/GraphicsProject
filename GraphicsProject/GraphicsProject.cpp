@@ -13,7 +13,7 @@ int main()
     window.setFramerateLimit(60);
 
     mesh Cube{ { 
-                {{0, 0, 0, 2}, {1, 0, 0, 1}, {1, 0, 1, 1}}, {{0, 0, 1, 1}, {0, 0, 0, 1}, {1, 0, 1, 1}},
+                {{0, 0, 0, 1}, {1, 0, 0, 1}, {1, 0, 1, 1}}, {{0, 0, 1, 1}, {0, 0, 0, 1}, {1, 0, 1, 1}},
                 {{0, 1, 0, 1}, {1, 1, 1, 1}, {1, 1, 0, 1}}, {{0, 1, 1, 1}, {1, 1, 1, 1}, {0, 1, 0, 1}},
                 {{1, 0, 1, 1}, {1, 1, 0, 1}, {1, 1, 1, 1}}, {{1, 0, 1, 1}, {1, 0, 0, 1}, {1, 1, 0, 1}},
                 {{0, 0, 1, 1}, {0, 1, 1, 1}, {0, 1, 0, 1}}, {{0, 0, 1, 1}, {0, 1, 0, 1}, {0, 0, 0, 1}},
@@ -30,7 +30,7 @@ int main()
 
 
     Camera cam;
-    Vec4 target = { 0.5, 0.5, 0.5 , 1};
+    //Vec4 target = { 0.5, 0.5, 0.5 , 1};
     cam.update({ 2.5, 2.5, 2.5 }, {0.5, 0.5, 0.5});
     Vec3 light = {2.5, 2.5, 2.5};
 
@@ -83,22 +83,11 @@ int main()
         window.clear(sf::Color::Black);
 
         // draw everything here...
-<<<<<<< Updated upstream
-        sf::Time elapsed = clock.getElapsedTime();
-        float t = elapsed.asSeconds();
-        clock.restart();
-        Mat4 T = getRotationMatrix(Vec3{ 0.5, 0.5, 0.5 }, Vec3{ 4, 6, 9}, 180 * t);
-        
-        
-        Cube.transform(T);        
-        draw(Cube, window, cam);
-=======
-        Mat4 T = getRotationMatrix(cam.target, cam.position, 5 * theta);
+       Mat4 T = getRotationMatrix(cam.target, cam.position, 5 * theta);
         Cube.transform(T);
 
         draw(Cube, window, cam, light);
         std::cout << "(" << light[0] << ", " << light[1] << ", " << light[2] << ")"<< std::endl;
->>>>>>> Stashed changes
 
         // end the current frame
         window.display();

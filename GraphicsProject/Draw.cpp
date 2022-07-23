@@ -3,22 +3,13 @@
 #include <algorithm>
 #include <vector>
 
-sf::Color applyAmbient(sf::Color c, float ambient) {
-	return sf::Color((float)c.r * ambient, 
-		(float)c.g * ambient,(float)c.b * ambient,c.a);
+sf::Color applyLighting(sf::Color c, float ambient, Vec3 normal, Vec3 light) {
+	float cosTheta = abs(dot(normalize(normal), normalize(light)));
+	return sf::Color((float)c.r * ambient * cosTheta, 
+		(float)c.g * ambient * cosTheta,(float)c.b * ambient * cosTheta,c.a);
 }
 
-sf::Color applyDiffuse(sf::Color c, Vec3 normal, Vec3 light) {
-	float intensity = abs(dot(normalize(normal), normalize(light)));
-	return sf::Color((float)c.r * intensity, 
-		(float)c.g * intensity,(float)c.b * intensity,c.a);
-}
-
-void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec3 light) {
-	float ambient = 1;
-
-<<<<<<< Updated upstream
-void rasterize(triangle t, sf::RenderWindow &window) {
+void rasterize(triangle t, sf::RenderWindow &window, float ambient, Vec3 normal, Vec3 light) {
 	std::vector<sf::Vertex> vertexarray;
 	vertexarray.push_back(sf::Vertex{ sf::Vector2f{1, 2} });
 	int xmin = std::min({ t.p0[0], t.p1[0], t.p2[0] });
@@ -28,7 +19,7 @@ void rasterize(triangle t, sf::RenderWindow &window) {
 
 	for (int i = ymin; i <= ymax; i++) {
 		for (int j = xmin; j <= xmax; j++) {
-			Vec4 currentPoint = { j, i, 0 };
+			Vec4 currentPoint = { (float)j, (float)i, 0 };
 			bool up1 = false, up2 = false, up3 = false;
 			Vec3 cp1 = (t.p1 - t.p0) * (currentPoint - t.p0);
 			Vec3 cp2 = (t.p2 - t.p1) * (currentPoint - t.p1);
@@ -38,17 +29,16 @@ void rasterize(triangle t, sf::RenderWindow &window) {
 			if (cp3[2] >= 0)up3 = true;
 
 			if (up1 == up2 && up2 == up3) {
-				vertexarray.push_back(sf::Vertex{ sf::Vector2f{float(j), float(i)}, t.fillColor });
+				sf::Color c = applyLighting(t.fillColor,ambient, normal, light);
+				vertexarray.push_back(sf::Vertex{ sf::Vector2f{float(j), float(i)}, c });
 			}
 		}
 	}
 	window.draw(&vertexarray[0], vertexarray.size(), sf::Points);
 }
 
-void draw(mesh M, sf::RenderWindow &window, Camera cam) {
+void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec3 light) {
 	//std::vector<std::vector<float> > zbuffer(SCREEN_HEIGHT, std::vector<float>(SCREEN_WIDTH));
-=======
->>>>>>> Stashed changes
 	Mat4 compressx = getScaleMatrix(Vec3{ aspect_ratio, 1, 1});
 	Mat4 translateCam = getTranslateMatrix(Vec3{ 0, 0, 0 } - cam.position);
 	Mat4 camTransform = rotateCam(cam);
@@ -65,25 +55,12 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam) {
 		Vector<4> pp2 = get2d(Transform*t.p2);
 
 		Mat4 maptoScreen = getScaleMatrix({ SCREEN_WIDTH / float(2), SCREEN_HEIGHT / float(2), 1 }) * getTranslateMatrix({ 1, 1, 0 });
-
-<<<<<<< Updated upstream
 		pp0 = maptoScreen * pp0;
 		pp1 = maptoScreen * pp1;
 		pp2 = maptoScreen * pp2;
 		
-		/*sf::VertexArray drawt(sf::Triangles, 3);
-		drawt[0].color = t.fillColor;
-		drawt[1].color = t.fillColor;
-		drawt[2].color = t.fillColor;
-		drawt[2].position = sf::Vector2f(pp0[0], pp0[1]);
-		drawt[0].position = sf::Vector2f(pp1[0], pp1[1]);
-		drawt[1].position = sf::Vector2f(pp2[0], pp2[1]);
-		window.draw(drawt);*/
-
-
-
-		rasterize(triangle{ pp0, pp1, pp2, t.fillColor }, window);
-=======
+		rasterize(triangle{ pp0, pp1, pp2, t.fillColor }, window, 0.2, cross_product, light);
+		/*
 
 		sf::VertexArray drawt(sf::Triangles, 3);
 		drawt[0].color = applyDiffuse(applyAmbient(t.fillColor, ambient), cross_product, light);
@@ -95,7 +72,7 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam) {
 		drawt[2].position = sf::Vector2f(pp3[0], pp3[1]);
 		
 		 window.draw(drawt);
->>>>>>> Stashed changes
+		 */
 	}
 }
 
