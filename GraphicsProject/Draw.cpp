@@ -25,6 +25,9 @@ void rasterize(triangle t, sf::RenderWindow &window, float ambient, Vec3 normal,
 }
 
 void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec3 light) {
+	std::vector<sf::Vertex> vertexarray;
+
+
 	std::vector<std::vector<float> > zbuffer(SCREEN_HEIGHT, std::vector<float>(SCREEN_WIDTH, INF));
 	Mat4 compressx = getScaleMatrix(Vec3{ aspect_ratio, 1, 1});
 	Mat4 translateCam = getTranslateMatrix(Vec3{ 0, 0, 0 } - cam.position);
@@ -59,7 +62,7 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec3 light) {
 
 		//rasterize
 
-		std::vector<sf::Vertex> vertexarray;
+		
 		vertexarray.push_back(sf::Vertex{ sf::Vector2f{-1, -1} });
 		int xmin = std::min({ pp0[0], pp1[0], pp2[0] });
 		int xmax = std::max({ pp0[0], pp1[0], pp2[0] });
@@ -92,12 +95,17 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec3 light) {
 
 				Vec4 temp = (t.p1 + t.p2 + t.p0) / 3;
 				Vec3 surfaceCenter = {temp[0], temp[1], temp[2]};
-				sf::Color c = applyLighting(t.fillColor, 0.2, normal, light - surfaceCenter);
+				Vec4 vertexCoordinates = (l0 * t.p0 + l1 * t.p1 + l2 * t.p2);
+				sf::Color c = applyLighting(t.fillColor, 0.6, normal, light-Vec3{vertexCoordinates[0], vertexCoordinates[1], vertexCoordinates[2]});
 				vertexarray.push_back(sf::Vertex{ sf::Vector2f{float(j), float(i)}, c });
 			}
 		}
-		window.draw(&vertexarray[0], vertexarray.size(), sf::Points);
+		
 	}
+
+
+
+	window.draw(&vertexarray[0], vertexarray.size(), sf::Points);
 	/*
 		rasterize(triangle{ pp0, pp1, pp2, t.fillColor }, window, 0.1, cross_product, {light - surfaceCenter}, zbuffer);
 		*/
