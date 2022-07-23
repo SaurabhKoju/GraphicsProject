@@ -8,6 +8,7 @@ float min(float x, float y){ return x < y ? x : y;}
 float max(float x, float y){ return x > y ? x : y;}
 
 sf::Color applyLighting(sf::Color c, float ambient, Vec3 normal, Vec3 light) {
+
 	float ka  = 1;
 	float cosTheta = max((dot(normalize(normal), normalize(light))), 0);
 	return sf::Color(
@@ -15,6 +16,7 @@ sf::Color applyLighting(sf::Color c, float ambient, Vec3 normal, Vec3 light) {
 			min((float)c.g * (ambient * ka + cosTheta), 255),
 			min((float)c.b * (ambient * ka + cosTheta), 255),
 			c.a);
+
 }
 
 void rasterize(triangle t, sf::RenderWindow &window, float ambient, Vec3 normal, Vec3 light, std::vector<std::vector<float> >& zbuffer) {
@@ -76,15 +78,10 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec3 light) {
 		pp0 = maptoScreen * pp0;
 		pp1 = maptoScreen * pp1;
 		pp2 = maptoScreen * pp2;
-		
-		rasterize(triangle{ pp0, pp1, pp2, t.fillColor }, window, 1, cross_product, light, zbuffer);
-		/*
 
 		Vec4 temp = (t.p1 + t.p2 + t.p0) / 3;
-		Vec3 surfaceCenter = {temp[0], temp[1], temp[2]};;
-		
-		rasterize(triangle{ pp0, pp1, pp2, t.fillColor }, window, 0.2, cross_product, {light - surfaceCenter});
-		*/
+		Vec3 surfaceCenter = {temp[0], temp[1], temp[2]};
+		rasterize(triangle{ pp0, pp1, pp2, t.fillColor }, window, 0.1, cross_product, {light - surfaceCenter}, zbuffer);
 	}
 }
 
