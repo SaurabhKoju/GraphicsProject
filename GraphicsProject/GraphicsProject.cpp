@@ -32,10 +32,14 @@ int main()
     Camera cam;
     //Vec4 target = { 0.5, 0.5, 0.5 , 1};
     cam.update({ 2.5, 2.5, 2.5 }, {0.5, 0.5, 0.5});
-    Vec3 light = {1.2, 0.8, 1.4};
+    Vec4 light = {1.2, 0.8, 1.4};
 
     sf::Clock clock;
     float theta = 0;
+
+    Vec4 oldposition{ -1, -1, 1, 1 };
+    Vec4 cubecentre{ 0.5, 0.5, 0.5 };
+
 
     while (window.isOpen())
     {
@@ -44,7 +48,6 @@ int main()
         sf::Time elapsed = clock.getElapsedTime();
         float t = elapsed.asSeconds();
         clock.restart();
-
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
@@ -79,15 +82,46 @@ int main()
                 else if(sf::Keyboard::isKeyPressed(sf::Keyboard::M))
                     light[2] -= 0.1;
             }
+            else if (event.type == sf::Event::MouseButtonReleased) {
+                if (event.mouseButton.button == sf::Mouse::Left) {
+                    oldposition = { -1, -1, 1, 1 };
+                }
+            }
+            else if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                sf::Vector2i mouseposition = sf::Mouse::getPosition(window);
+                //std::cout << mouseposition.x << ' ' << mouseposition.y << std::endl;
+                Vec4 newposition{ mouseposition.x, mouseposition.y, 1};
+
+
+                Mat4 expandx = getScaleMatrix(Vec4{ 1/aspect_ratio, 1, 1 });
+                Mat4 translateCam = getTranslateMatrix(cam.position);
+                Mat4 screentoPort = translateCam * camtoWorld(cam) * expandx * getTranslateMatrix({ -1, -1, 0 }) * getScaleMatrix({ float(2)/ SCREEN_WIDTH, float(2) / SCREEN_HEIGHT, 1 });
+
+                if (oldposition[0] == -1 )oldposition = newposition;
+                if (oldposition == newposition)continue;
+
+                oldposition = screentoPort * oldposition;
+                newposition = screentoPort * newposition;
+
+
+                float angle = acosf(dot(normalize(oldposition - cubecentre), normalize(newposition - cubecentre)));
+
+                Vec4 axis = (oldposition - cubecentre) * (newposition - cubecentre);
+
+                Mat4 X = getRotationMatrix(cubecentre, cubecentre + axis, angle);
+                Cube.transform(X);
+                oldposition = newposition;
+            }
         }
         window.clear(sf::Color::Black);
 
         // draw everything here...
         Mat4 T = getRotationMatrix(cam.target, cam.position, 5 * theta);
+        //T = getRotationMatrix(cubecentre, cubecentre + Vec4{ 1, 0, 0, 0 }, 5 * theta);
         Cube.transform(T);
 
         draw(Cube, window, cam, light);
-        std::cout << "(" << light[0] << ", " << light[1] << ", " << light[2] << ")"<< std::endl;
+        std::cout << "(" << light[0] << ", " << light[1] << ", " << light[2] << ")" << std::endl;
 
         // end the current frame
         window.display();

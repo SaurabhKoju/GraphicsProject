@@ -3,16 +3,16 @@
 
 class Camera {
 public:
-	Vec3 position;
-	Vec3 target;
+	Vec4 position;
+	Vec4 target;
 
-	Vec3 down;
-	Vec3 right;
-	Vec3 look;
+	Vec4 down;
+	Vec4 right;
+	Vec4 look;
 
 	static float speed;
 
-	void update(Vector<3> cameraPosition, Vector<3> targetPosition);
+	void update(Vec4 cameraPosition, Vec4 targetPosition);
 
 	void ZoomIn(float time);
 	void ZoomOut(float time);
@@ -22,4 +22,5 @@ public:
 	void moveLeft(float time);
 };
 
-Mat4 rotateCam(Camera cam);
+Mat4 worldtoCam(Camera cam);
+Mat4 camtoWorld(Camera cam);

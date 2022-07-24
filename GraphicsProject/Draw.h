@@ -6,5 +6,4 @@
 #include "Primitives.h"
 
 
-void drawline(Vector<2> p1, Vector<2> p2, sf::RenderWindow &window);
-void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec3 light);
+void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec4 light);

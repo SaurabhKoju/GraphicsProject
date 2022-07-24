@@ -25,14 +25,21 @@ public:
 	
 	}
 };
+
+typedef Matrix<3, 3> Mat3;
+typedef Matrix<4, 4> Mat4;
+typedef Vector<3> Vec3;
+typedef Vector<4> Vec4;
+const Vec4 Zero4 = { 0, 0, 0, 0 };
+
+
+
 template <int n>
 Vector<n> operator*(Matrix<n, n>, Vector<n>);
 
-Vector<3> operator*(Vector<3>, Vector<3>);
-Vector<3> operator+(Vector<3>, Vector<3>);
-Vector<4> operator+(Vector<4>, Vector<4>);
-Vector<4> operator/(Vector<4>, float a);
-Vector<3> operator*(Vector<4>, Vector<4>);
+Vec4 operator*(Vec4, Vec4);
+Vec4 operator/(Vec4, float a);
+
 
 template <int n>
 Vector<n> operator-(Vector<n>, Vector<n>);
@@ -40,24 +47,18 @@ template <int n>
 Vector<n> operator+(Vector<n>, Vector<n>);
 template <int n>
 Vector<n> operator*(float scalar, Vector<n>);
+template <int n>
+bool operator==(Vector<n>, Vector<n>);
 
-float dot(Vector<3> x, Vector<3> y);
-Vector<3> normalize(Vector<3> x);
-
-
-
-
-
-typedef Matrix<3, 3> Mat3;
-typedef Matrix<4, 4> Mat4;
-typedef Vector<3> Vec3;
-typedef Vector<4> Vec4;
+float dot(Vec4 x, Vec4 y);
+Vec4 normalize(Vec4 x);
+float magnitudeSquared(Vec4);
 
 
-Mat4 getScaleMatrix(Vector<3> s);
-Mat4 getTranslateMatrix(Vector<3> t);
-Mat3 getTransformMatrix(Vector<3> a, Vector<3> b, Vector<3> c);
-Mat4 getRotationMatrix(Vector<3> tail, Vector<3> head, float angle); //angle in degrees
+Mat4 getScaleMatrix(Vec4 s);
+Mat4 getTranslateMatrix(Vec4 t);
+Mat3 getTransformMatrix(Vec4 a, Vec4 b, Vec4 c);
+Mat4 getRotationMatrix(Vec4 tail, Vec4 head, float angle); //angle in degrees
 Mat4 rotateAboutZ(float angle);
 Mat4 rotateAboutY(float angle);
 Mat4 rotateAboutX(float angle);
