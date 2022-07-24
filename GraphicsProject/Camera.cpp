@@ -14,39 +14,34 @@ void Camera::update(Vec4 cameraPosition, Vec4 targetPosition) {
 float Camera::speed = 4;
 
 void Camera::ZoomIn(float time) {
-	Vec4 v = scale(normalize(this->look), {speed * time, speed * time, speed * time});
+	Vec4 v = scale((this->look), {speed * time, speed * time, speed * time});
 	position = position + v;
 	Camera::update(this->position, this->target);
 }
 void Camera::ZoomOut(float time) {
-	Vec4 v = scale(normalize(this->look), {speed * time, speed * time, speed * time});
+	Vec4 v = scale((this->look), {speed * time, speed * time, speed * time});
 	position = position - v;
 	Camera::update(this->position, this->target);
-
 }
 
 void Camera::moveUp(float time) {
-	Vec4 base = this->look * this->right;
-	Vec4 v = scale(normalize(base), {speed * time, speed * time, speed * time});
+	Vec4 v = scale(this->down, {speed * time, speed * time, speed * time});
 	position = position - v;
 	Camera::update(this->position, this->target);
 }
 void Camera::moveDown(float time) {
-	Vec4 base = this->look * this->right;
-	Vec4 v = scale(normalize(base), {speed * time, speed * time, speed * time});
+	Vec4 v = scale(this->down, {speed * time, speed * time, speed * time});
 	position = position + v;
 	Camera::update(this->position, this->target);
 }
 void Camera::moveLeft(float time) {
-	Vec4 base = this->look * this->down;
-	Vec4 v = scale(normalize(base), {speed * time, speed * time, speed * time});
-	position = position + v;
+	Vec4 v = scale(this->right, {speed * time, speed * time, speed * time});
+	position = position - v;
 	Camera::update(this->position, this->target);
 }
 void Camera::moveRight(float time) {
-	Vec4 base = this->look * this->down;
-	Vec4 v = scale(normalize(base), {speed * time, speed * time, speed * time});
-	position = position - v;
+	Vec4 v = scale(this->right, {speed * time, speed * time, speed * time});
+	position = position + v;
 	Camera::update(this->position, this->target);
 }
 
