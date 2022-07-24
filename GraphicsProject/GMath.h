@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <cmath>
+const double pi = 3.141592654;
 
 template <int m, int n>
 class Matrix {

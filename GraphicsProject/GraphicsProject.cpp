@@ -89,26 +89,21 @@ int main()
             }
             else if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                 sf::Vector2i mouseposition = sf::Mouse::getPosition(window);
-                //std::cout << mouseposition.x << ' ' << mouseposition.y << std::endl;
-                Vec4 newposition{ mouseposition.x, mouseposition.y, 1};
+                Vec4 newposition{ mouseposition.x, mouseposition.y, 1, 1};
 
-
-                Mat4 expandx = getScaleMatrix(Vec4{ 1/aspect_ratio, 1, 1 });
-                Mat4 translateCam = getTranslateMatrix(cam.position);
-                Mat4 screentoPort = translateCam * camtoWorld(cam) * expandx * getTranslateMatrix({ -1, -1, 0 }) * getScaleMatrix({ float(2)/ SCREEN_WIDTH, float(2) / SCREEN_HEIGHT, 1 });
+                Mat4 T = screentoPort(cam);
 
                 if (oldposition[0] == -1 )oldposition = newposition;
                 if (oldposition == newposition)continue;
 
-                oldposition = screentoPort * oldposition;
-                newposition = screentoPort * newposition;
+                Vec4 world_oldposition = T * oldposition;
+                Vec4 world_newposition = T * newposition;
 
+                float angle = acosf(dot(normalize(world_oldposition - cubecentre), normalize(world_newposition - cubecentre)));
 
-                float angle = acosf(dot(normalize(oldposition - cubecentre), normalize(newposition - cubecentre)));
+                Vec4 axis = (world_oldposition - cubecentre) * (world_newposition - cubecentre);
 
-                Vec4 axis = (oldposition - cubecentre) * (newposition - cubecentre);
-
-                Mat4 X = getRotationMatrix(cubecentre, cubecentre + axis, angle);
+                Mat4 X = getRotationMatrix(cubecentre, cubecentre + axis, angle*180/pi*2.5); //2.5 rotation factor or something
                 Cube.transform(X);
                 oldposition = newposition;
             }
@@ -121,11 +116,13 @@ int main()
         Cube.transform(T);
 
         draw(Cube, window, cam, light);
-        std::cout << "(" << light[0] << ", " << light[1] << ", " << light[2] << ")" << std::endl;
+        //std::cout << "(" << light[0] << ", " << light[1] << ", " << light[2] << ")" << std::endl;
 
         // end the current frame
         window.display();
     }
+    
+
 
 
 

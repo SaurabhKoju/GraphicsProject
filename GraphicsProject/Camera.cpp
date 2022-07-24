@@ -1,5 +1,6 @@
 #include "Camera.h"
 #include "GMath.h"
+#include "Primitives.h"
 
 void Camera::update(Vec4 cameraPosition, Vec4 targetPosition) {
 	position = cameraPosition;
@@ -67,5 +68,13 @@ Mat4 camtoWorld(Camera cam) {
 		rotate.matrix[2][0], rotate.matrix[2][1], rotate.matrix[2][2], 0,
 		0, 0, 0, 1
 	};
+	return ans;
+}
+
+Mat4 screentoPort(Camera cam){
+	Mat4 expandx = getScaleMatrix(Vec4{ 1 / aspect_ratio, 1, 1, 1 });
+	Mat4 translateCam = getTranslateMatrix(cam.position);
+	Mat4 PortCam = expandx * getTranslateMatrix({ -1, -1, 0 }) * getScaleMatrix({ float(2) / SCREEN_WIDTH, float(2) / SCREEN_HEIGHT, 1 });
+	Mat4 ans = translateCam * camtoWorld(cam) * PortCam;
 	return ans;
 }

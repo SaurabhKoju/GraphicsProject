@@ -1,6 +1,5 @@
 #include "GMath.h"
 #include <cmath>
-const double pi = 3.141592654;
 
 Vec4 operator/(Vec4 x, float a) {
 	Vector<4> p;
