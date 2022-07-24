@@ -45,7 +45,6 @@ int main()
     circle.setRadius(5);
     circle.setFillColor(sf::Color(255, 255, 187));
     Vec4 lightOrigin = worldtoScreen(cam, light);
-    lightOrigin.display();
     circle.setOrigin(sf::Vector2f(2.5, 2.5));
     circle.setPosition(sf::Vector2f(lightOrigin[0], lightOrigin[1]));
 
