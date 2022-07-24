@@ -1,6 +1,7 @@
 #include <fstream>
 #include "primitives.h"
 
-mesh LoadObject() {
+void LoadObject() {
 	std::ifstream x;
+
 }

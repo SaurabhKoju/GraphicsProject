@@ -104,6 +104,14 @@ Vector<n> operator*(float s, Vector<n> x) {
 }
 
 template <int n>
+bool operator==(Vector<n> x, Vector<n> y) {
+	for (int i = 0; i < n; i++) {
+		if (fabs(x[i] - y[i]) > 0.000005)return false;
+	}
+	return true;
+}
+
+template <int n>
 Vector<n> scale(Vector<n> x, Vector<n> y) {
 	Vector<n> ans;
 	for (int i = 0; i < n; i++) {
@@ -118,13 +126,4 @@ void Vector<n>::display() {
 		std::cout << this->vector[i] << ' ';
 	}
 	std::cout << std::endl;
-}
-
-template <int n>
-float magnitudeSquared(Vector<n> x) {
-	float ans = 0;
-	for (int i = 0; i < n; i++) {
-		ans += x[i] * x[i];
-	}
-	return ans;
 }

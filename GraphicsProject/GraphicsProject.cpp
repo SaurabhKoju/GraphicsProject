@@ -32,10 +32,22 @@ int main()
     Camera cam;
     //Vec4 target = { 0.5, 0.5, 0.5 , 1};
     cam.update({ 2.5, 2.5, 2.5 }, {0.5, 0.5, 0.5});
-    Vec3 light = {1.2, 0.8, 1.4};
+    Vec4 light = {1.2, 0.8, 1.4, 1};
 
     sf::Clock clock;
     float theta = 0;
+
+    Vec4 oldposition{ -1, -1, 1, 1 };
+    Vec4 cubecentre{ 0.5, 0.5, 0.5 };
+
+
+    sf::CircleShape circle;
+    circle.setRadius(5);
+    circle.setFillColor(sf::Color(255, 255, 187));
+    Vec4 lightOrigin = worldtoScreen(cam, light);
+    lightOrigin.display();
+    circle.setOrigin(sf::Vector2f(2.5, 2.5));
+    circle.setPosition(sf::Vector2f(lightOrigin[0], lightOrigin[1]));
 
     while (window.isOpen())
     {
@@ -44,7 +56,6 @@ int main()
         sf::Time elapsed = clock.getElapsedTime();
         float t = elapsed.asSeconds();
         clock.restart();
-
         while (window.pollEvent(event))
         {
             if (event.type == sf::Event::Closed)
@@ -79,19 +90,49 @@ int main()
                 else if(sf::Keyboard::isKeyPressed(sf::Keyboard::M))
                     light[2] -= 0.1;
             }
+            else if (event.type == sf::Event::MouseButtonReleased) {
+                if (event.mouseButton.button == sf::Mouse::Left) {
+                    oldposition = { -1, -1, 1, 1 };
+                }
+            }
+            else if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
+                sf::Vector2i mouseposition = sf::Mouse::getPosition(window);
+                Vec4 newposition{ mouseposition.x, mouseposition.y, 1, 1};
+
+                Mat4 T = screentoPort(cam);
+
+                if (oldposition[0] == -1 )oldposition = newposition;
+                if (oldposition == newposition)continue;
+
+                Vec4 world_oldposition = T * oldposition;
+                Vec4 world_newposition = T * newposition;
+
+                float angle = acosf(dot(normalize(world_oldposition - cubecentre), normalize(world_newposition - cubecentre)));
+
+                Vec4 axis = (world_oldposition - cubecentre) * (world_newposition - cubecentre);
+
+                Mat4 X = getRotationMatrix(cubecentre, cubecentre + axis, angle*180/pi*2.5); //2.5 rotation factor or something
+                Cube.transform(X);
+                oldposition = newposition;
+            }
         }
         window.clear(sf::Color::Black);
 
         // draw everything here...
-        Mat4 T = getRotationMatrix(cam.target, cam.position, 5 * theta);
-        Cube.transform(T);
 
+        Mat4 T = getRotationMatrix(cam.target, cam.position, 5 * theta);        
+        Cube.transform(T);
         draw(Cube, window, cam, light);
-        std::cout << "(" << light[0] << ", " << light[1] << ", " << light[2] << ")"<< std::endl;
+
+        Vec4 lightOrigin = worldtoScreen(cam, light);
+        circle.setPosition(sf::Vector2f(lightOrigin[0], lightOrigin[1]));
+        window.draw(circle);
 
         // end the current frame
         window.display();
     }
+    
+
 
 
 

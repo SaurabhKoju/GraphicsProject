@@ -1,29 +1,6 @@
 #include "GMath.h"
 #include <cmath>
-const double pi = 3.141592654;
 
-Vec3 operator*(Vec3 x, Vec3 y) {
-	Vector<3> p;
-	p[0] = x[1] * y[2] - x[2] * y[1];
-	p[1] = x[2] * y[0] - x[0] * y[2];
-	p[2] = x[0] * y[1] - x[1] * y[0];
-	return p;
-}
-Vec3 operator+(Vec3 x, Vec3 y) {
-	Vector<3> p;
-	p[0] = x[0] + y[0];
-	p[1] = x[1] + y[1];
-	p[2] = x[2] + y[2];
-	return p;
-}
-Vec4 operator+(Vec4 x, Vec4 y) {
-	Vector<4> p;
-	p[0] = x[0] + y[0];
-	p[1] = x[1] + y[1];
-	p[2] = x[2] + y[2];
-	p[3] = x[3] + y[3];
-	return p;
-}
 Vec4 operator/(Vec4 x, float a) {
 	Vector<4> p;
 	p[0] = x[0] / a;
@@ -33,24 +10,29 @@ Vec4 operator/(Vec4 x, float a) {
 	return p;
 }
 
-Vector<3> operator*(Vector<4> x, Vector<4> y) {
-	Vector<3> p;
+Vec4 operator*(Vector<4> x, Vector<4> y) {
+	Vec4 p;
 	p[0] = x[1] * y[2] - x[2] * y[1];
 	p[1] = x[2] * y[0] - x[0] * y[2];
 	p[2] = x[0] * y[1] - x[1] * y[0];
+	p[3] = 1;
 	return p;
 }
 
-float dot(Vector<3> x, Vector<3> y) {
+float magnitudeSquared(Vec4 x) {
+	return x[0] * x[0] + x[1] * x[1] + x[2] * x[2];
+}
+
+float dot(Vec4 x, Vec4 y) {
 	return(x[0] * y[0] + x[1] * y[1] + x[2] * y[2]);
 }
 
-Vector<3> normalize(Vector<3> x) {
+Vec4 normalize(Vec4 x) {
 	float m = sqrt(x[0] * x[0] + x[1] * x[1] + x[2] * x[2]);
-	return(Vector<3>{ x[0] / m, x[1] / m, x[2] / m });
+	return(Vec4{ x[0] / m, x[1] / m, x[2] / m , 1});
 }
 
-Mat4 getScaleMatrix(Vec3 s) {
+Mat4 getScaleMatrix(Vec4 s) {
 	return(Mat4{
 		s[0], 0, 0, 0,
 		0, s[1], 0, 0,
@@ -59,7 +41,7 @@ Mat4 getScaleMatrix(Vec3 s) {
 		});
 }
 
-Mat4 getTranslateMatrix(Vec3 t) {
+Mat4 getTranslateMatrix(Vec4 t) {
 	return(Mat4{
 		1, 0, 0, t[0],
 		0, 1, 0, t[1],
@@ -68,7 +50,7 @@ Mat4 getTranslateMatrix(Vec3 t) {
 		});
 }
 
-Mat3 getTransformMatrix(Vec3 a, Vec3 b, Vec3 c) {
+Mat3 getTransformMatrix(Vec4 a, Vec4 b, Vec4 c) {
 	return(Mat3{
 		a[0], b[0], c[0],
 		a[1], b[1], c[1],
@@ -133,13 +115,13 @@ Mat4 rotateAboutX(float cosine, float sine) {
 		});
 }
 
-Mat4 getRotationMatrix(Vec3 tail, Vec3 head, float angle) {
-	Vec3 v = head - tail;
+Mat4 getRotationMatrix(Vec4 tail, Vec4 head, float angle) {
+	Vec4 v = head - tail;
 	if (v[1] == 0 && v[2] == 0) {
 		if (v[0] < 0) {
-			return getTranslateMatrix(tail) * rotateAboutX(-angle) * getTranslateMatrix(Vec3{ 0, 0, 0 } - tail);
+			return getTranslateMatrix(tail) * rotateAboutX(-angle) * getTranslateMatrix(Vec4{ 0, 0, 0, 0 } - tail);
 		}
-		return getTranslateMatrix(tail) * rotateAboutX(angle)* getTranslateMatrix(Vec3{ 0, 0, 0 } - tail);
+		return getTranslateMatrix(tail) * rotateAboutX(angle)* getTranslateMatrix(Vec4{ 0, 0, 0, 0 } - tail);
 	}
 	float Xanglecosine = v[1] / sqrt(v[1]*v[1] + v[2]*v[2]);
 	float Xanglesine = v[2] / sqrt(v[1]*v[1] + v[2]*v[2]);
@@ -150,5 +132,5 @@ Mat4 getRotationMatrix(Vec3 tail, Vec3 head, float angle) {
 	Mat4 Zrotate = rotateAboutZ(Zanglecosine, -Zanglesine);
 	Mat4 Zantirotate = rotateAboutZ(Zanglecosine, Zanglesine);
 
-	return getTranslateMatrix(tail) * Xantirotate * Zantirotate * rotateAboutX(angle) * Zrotate * Xrotate * getTranslateMatrix(Vec3{0, 0, 0}-tail);
+	return getTranslateMatrix(tail) * Xantirotate * Zantirotate * rotateAboutX(angle) * Zrotate * Xrotate * getTranslateMatrix(Vec4{0, 0, 0, 0}-tail);
 }
