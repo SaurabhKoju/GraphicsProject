@@ -3,4 +3,5 @@
 
 void LoadObject() {
 	std::ifstream x;
+
 }

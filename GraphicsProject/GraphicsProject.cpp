@@ -32,7 +32,7 @@ int main()
     Camera cam;
     //Vec4 target = { 0.5, 0.5, 0.5 , 1};
     cam.update({ 2.5, 2.5, 2.5 }, {0.5, 0.5, 0.5});
-    Vec4 light = {1.2, 0.8, 1.4};
+    Vec4 light = {1.2, 0.8, 1.4, 1};
 
     sf::Clock clock;
     float theta = 0;
@@ -40,6 +40,14 @@ int main()
     Vec4 oldposition{ -1, -1, 1, 1 };
     Vec4 cubecentre{ 0.5, 0.5, 0.5 };
 
+
+    sf::CircleShape circle;
+    circle.setRadius(5);
+    circle.setFillColor(sf::Color(255, 255, 187));
+    Vec4 lightOrigin = worldtoScreen(cam, light);
+    lightOrigin.display();
+    circle.setOrigin(sf::Vector2f(2.5, 2.5));
+    circle.setPosition(sf::Vector2f(lightOrigin[0], lightOrigin[1]));
 
     while (window.isOpen())
     {
@@ -111,12 +119,14 @@ int main()
         window.clear(sf::Color::Black);
 
         // draw everything here...
-        Mat4 T = getRotationMatrix(cam.target, cam.position, 5 * theta);
-        //T = getRotationMatrix(cubecentre, cubecentre + Vec4{ 1, 0, 0, 0 }, 5 * theta);
-        Cube.transform(T);
 
+        Mat4 T = getRotationMatrix(cam.target, cam.position, 5 * theta);        
+        Cube.transform(T);
         draw(Cube, window, cam, light);
-        std::cout << "(" << light[0] << ", " << light[1] << ", " << light[2] << ")" << std::endl;
+
+        Vec4 lightOrigin = worldtoScreen(cam, light);
+        circle.setPosition(sf::Vector2f(lightOrigin[0], lightOrigin[1]));
+        window.draw(circle);
 
         // end the current frame
         window.display();
