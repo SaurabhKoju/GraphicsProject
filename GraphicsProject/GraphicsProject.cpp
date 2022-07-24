@@ -116,7 +116,7 @@ int main()
         Cube.transform(T);
 
         draw(Cube, window, cam, light);
-        //std::cout << "(" << light[0] << ", " << light[1] << ", " << light[2] << ")" << std::endl;
+        std::cout << "(" << light[0] << ", " << light[1] << ", " << light[2] << ")" << std::endl;
 
         // end the current frame
         window.display();

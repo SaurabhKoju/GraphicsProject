@@ -93,7 +93,7 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec4 light) {
 
 				Vec4 surfaceCenter = (t.p1 + t.p2 + t.p0) / 3;
 				Vec4 vertexCoordinates = (l0 * t.p0 + l1 * t.p1 + l2 * t.p2);
-				sf::Color c = applyLighting(t.fillColor, 0.2, normal, light-vertexCoordinates);
+				sf::Color c = applyLighting(t.fillColor, 0.2, cross_product, light-vertexCoordinates);
 				vertexarray.push_back(sf::Vertex{ sf::Vector2f{float(j), float(i)}, c });
 			}
 		}
