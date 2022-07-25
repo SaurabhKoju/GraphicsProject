@@ -149,6 +149,7 @@
     <ClCompile Include="Draw.cpp" />
     <ClCompile Include="GMath.cpp" />
     <ClCompile Include="GraphicsProject.cpp" />
+    <ClCompile Include="Lighting.cpp" />
     <ClCompile Include="ObjectLoader.cpp" />
     <ClCompile Include="primitives.cpp" />
     <ClCompile Include="Projection.cpp" />
@@ -158,6 +159,7 @@
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Draw.h" />
     <ClInclude Include="GMath.h" />
+    <ClInclude Include="Lighting.h" />
     <ClInclude Include="Primitives.h" />
     <ClInclude Include="Projection.h" />
   </ItemGroup>

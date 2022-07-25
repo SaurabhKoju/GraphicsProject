@@ -1,6 +1,9 @@
 #include "GMath.h"
 #include <cmath>
 
+float min(float x, float y) { return x < y ? x : y; }
+float max(float x, float y) { return x > y ? x : y; }
+
 Vec4 operator/(Vec4 x, float a) {
 	Vector<4> p;
 	p[0] = x[0] / a;

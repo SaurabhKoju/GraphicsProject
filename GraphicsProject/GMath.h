@@ -3,6 +3,10 @@
 #include <cmath>
 const double pi = 3.141592654;
 
+float min(float x, float y);
+float max(float x, float y);
+
+
 template <int m, int n>
 class Matrix {
 public:

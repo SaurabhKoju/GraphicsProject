@@ -6,6 +6,10 @@
 #define SCREEN_HEIGHT 720
 const float aspect_ratio = float(SCREEN_HEIGHT) / SCREEN_WIDTH;
 
+struct material {
+	float ka[3], kd[3], ks[3], ns[3];
+};
+
 struct triangle {
 	Vector<4> p0, p1, p2;
 	sf::Color fillColor;

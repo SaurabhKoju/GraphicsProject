@@ -2,11 +2,9 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include "Lighting.h"
 
 const float INF = 1000000000;
-
-float min(float x, float y){ return x < y ? x : y;}
-float max(float x, float y){ return x > y ? x : y;}
 
 sf::Color applyLighting(sf::Color c, float ambient, Vec4 normal, Vec4 light) {
 
@@ -60,7 +58,6 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec4 light) {
 		//rasterize
 
 		
-		vertexarray.push_back(sf::Vertex{ sf::Vector2f{-1, -1} });
 		int xmin = std::min({ pp0[0], pp1[0], pp2[0] });
 		int xmax = std::max({ pp0[0], pp1[0], pp2[0] });
 		int ymin = std::min({ pp0[1], pp1[1], pp2[1] });
@@ -91,9 +88,8 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec4 light) {
 
 				Vec4 normal = l0 * vn0 + l1 * vn1 + l2 * vn2;
 
-				Vec4 surfaceCenter = (t.p1 + t.p2 + t.p0) / 3;
-				Vec4 vertexCoordinates = (l0 * t.p0 + l1 * t.p1 + l2 * t.p2);
-				sf::Color c = applyLighting(t.fillColor, 0.2, cross_product, light-vertexCoordinates);
+				Vec4 vertexCoordinates = l0 * t.p0 + l1 * t.p1 + l2 * t.p2;
+				sf::Color c = applyLighting2(light-vertexCoordinates, cross_product, cam.position-vertexCoordinates, 0.2);
 				vertexarray.push_back(sf::Vertex{ sf::Vector2f{float(j), float(i)}, c });
 			}
 		}
@@ -101,8 +97,8 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec4 light) {
 	}
 
 
-
-	window.draw(&vertexarray[0], vertexarray.size(), sf::Points);
+	if(vertexarray.size())
+		window.draw(&vertexarray[0], vertexarray.size(), sf::Points);
 	/*
 		rasterize(triangle{ pp0, pp1, pp2, t.fillColor }, window, 0.1, cross_product, {light - surfaceCenter}, zbuffer);
 		*/
