@@ -168,11 +168,6 @@
     <None Include="GMath.inl" />
     <None Include="simplecube.mtl" />
   </ItemGroup>
-  <ItemGroup>
-    <Object Include="simplecube.obj">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </Object>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

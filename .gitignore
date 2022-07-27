@@ -364,3 +364,6 @@ FodyWeavers.xsd
 
 build
 *.dll
+/GraphicsProject/casa.mtl
+/GraphicsProject/cube.mtl
+/GraphicsProject/exteriorCar.mtl

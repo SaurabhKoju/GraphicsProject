@@ -26,6 +26,10 @@ float magnitudeSquared(Vec4 x) {
 	return x[0] * x[0] + x[1] * x[1] + x[2] * x[2];
 }
 
+float magnitude(Vec4 x) {
+	return sqrt(x[0] * x[0] + x[1] * x[1] + x[2] * x[2]);
+}
+
 float dot(Vec4 x, Vec4 y) {
 	return(x[0] * y[0] + x[1] * y[1] + x[2] * y[2]);
 }

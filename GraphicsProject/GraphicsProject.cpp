@@ -6,6 +6,7 @@
 #include "Primitives.h"
 #include "ObjectLoader.h"
 #include <iostream>
+#include <cassert>
 
 
 int main()
@@ -31,16 +32,18 @@ int main()
 
 
     Camera cam;
-    //Vec4 target = { 0.5, 0.5, 0.5 , 1};
-    cam.update({ 10, 10, 10 }, {0.5, 0.5, 0.5});
+    cam.update({ 7, 7, 7, 1 }, {0.5, 0.5, 0.5, 1}); //for cube
+    //cam.update({ 0.299671, 1.34242, -4.89153, 1 }, { 0, 0, 0, 1 }); //for car
     Vec4 light = {4.5, 0.5, 4, 1};
 
-    sf::Clock clock;
-    float theta = 0;
+    Cube = LoadObject("simplecube.mtl", "simplecube.obj");
+    //Cube = LoadObject("exteriorCar.mtl", "exteriorCar.obj");
 
     Vec4 oldposition{ -1, -1, 1, 1 };
     Vec4 cubecentre{ 0, 0, 0 };
 
+    sf::Clock clock;
+    float theta = 0;
 
     sf::CircleShape circle;
     circle.setRadius(5);
@@ -48,10 +51,6 @@ int main()
     Vec4 lightOrigin = worldtoScreen(cam, light);
     circle.setOrigin(sf::Vector2f(2.5, 2.5));
     circle.setPosition(sf::Vector2f(lightOrigin[0], lightOrigin[1]));
-
-
-    Cube = LoadObject("simplecube.mtl", "simplecube.obj");
-    //return 0;
 
     while (window.isOpen())
     {
@@ -111,11 +110,10 @@ int main()
                 Vec4 world_oldposition = T * oldposition;
                 Vec4 world_newposition = T * newposition;
 
-                float angle = acosf(dot(normalize(world_oldposition - cubecentre), normalize(world_newposition - cubecentre)));
-
+                float angle = magnitude(oldposition - newposition) * 0.2;
                 Vec4 axis = (world_oldposition - cubecentre) * (world_newposition - cubecentre);
 
-                Mat4 X = getRotationMatrix(cubecentre, cubecentre + axis, angle*180/pi*2.5); //2.5 rotation factor or something
+                Mat4 X = getRotationMatrix(cubecentre, cubecentre + axis, angle);
                 Cube.transform(X);
                 oldposition = newposition;
             }
@@ -130,7 +128,7 @@ int main()
 
         Vec4 lightOrigin = worldtoScreen(cam, light);
         circle.setPosition(sf::Vector2f(lightOrigin[0], lightOrigin[1]));
-        light.display();
+        //cam.position.display();
         window.draw(circle);
 
         // end the current frame

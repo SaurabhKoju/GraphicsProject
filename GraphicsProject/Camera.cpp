@@ -11,7 +11,7 @@ void Camera::update(Vec4 cameraPosition, Vec4 targetPosition) {
 	down = look * right;
 }
 
-float Camera::speed = 4;
+float Camera::speed = 6;
 
 void Camera::ZoomIn(float time) {
 	Vec4 v = scale((this->look), {speed * time, speed * time, speed * time});

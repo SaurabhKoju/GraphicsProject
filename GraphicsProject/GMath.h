@@ -58,6 +58,7 @@ bool operator==(Vector<n>, Vector<n>);
 float dot(Vec4 x, Vec4 y);
 Vec4 normalize(Vec4 x);
 float magnitudeSquared(Vec4);
+float magnitude(Vec4);
 
 
 Mat4 getScaleMatrix(Vec4 s);

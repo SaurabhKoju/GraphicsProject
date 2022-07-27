@@ -49,7 +49,7 @@ mesh LoadObject(std::string mtl_file_path, std::string obj_file_path) {
 
 
 	std::vector<Vec4> vertices;
-	material current_material;
+	material current_material = default_material;
 	while (std::getline(obj_file, line)) {
 		std::istringstream iss(line);
 		std::string first_token;
