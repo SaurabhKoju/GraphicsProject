@@ -4,6 +4,7 @@
 #include "Draw.h"
 #include "Camera.h"
 #include "Primitives.h"
+#include "ObjectLoader.h"
 #include <iostream>
 
 
@@ -31,14 +32,14 @@ int main()
 
     Camera cam;
     //Vec4 target = { 0.5, 0.5, 0.5 , 1};
-    cam.update({ 2.5, 2.5, 2.5 }, {0.5, 0.5, 0.5});
-    Vec4 light = {1.2, 0.8, 1.4, 1};
+    cam.update({ 10, 10, 10 }, {0.5, 0.5, 0.5});
+    Vec4 light = {4.5, 0.5, 4, 1};
 
     sf::Clock clock;
     float theta = 0;
 
     Vec4 oldposition{ -1, -1, 1, 1 };
-    Vec4 cubecentre{ 0.5, 0.5, 0.5 };
+    Vec4 cubecentre{ 0, 0, 0 };
 
 
     sf::CircleShape circle;
@@ -47,6 +48,10 @@ int main()
     Vec4 lightOrigin = worldtoScreen(cam, light);
     circle.setOrigin(sf::Vector2f(2.5, 2.5));
     circle.setPosition(sf::Vector2f(lightOrigin[0], lightOrigin[1]));
+
+
+    Cube = LoadObject("simplecube.mtl", "simplecube.obj");
+    //return 0;
 
     while (window.isOpen())
     {
@@ -125,6 +130,7 @@ int main()
 
         Vec4 lightOrigin = worldtoScreen(cam, light);
         circle.setPosition(sf::Vector2f(lightOrigin[0], lightOrigin[1]));
+        light.display();
         window.draw(circle);
 
         // end the current frame

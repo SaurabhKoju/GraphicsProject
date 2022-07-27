@@ -59,10 +59,21 @@
     <ClInclude Include="Lighting.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="ObjectLoader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="GMath.inl">
       <Filter>Header Files</Filter>
     </None>
+    <None Include="simplecube.mtl">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Object Include="simplecube.obj">
+      <Filter>Resource Files</Filter>
+    </Object>
   </ItemGroup>
 </Project>

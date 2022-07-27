@@ -11,8 +11,8 @@ sf::Color applyLighting2(Vec4 light, Vec4 normal, Vec4 view, float ambientIntens
 	for (int i = 0; i < 3; i++) {
 		float intensity = 0;
 		float ambient = m.ka[i] * ambientIntensity;
-		float diffuse = max(dot(light, normal), 0) * m.kd[i];
-		float specular = diffuse > 0 ? pow(max(dot(reflection, view), 0), m.ns[i]) * m.ks[i] : 0;
+		float diffuse = max(dot(light, normal), 0) * m.kd[i] / magnitudeSquared(light);
+		float specular = diffuse > 0 ? pow(max(dot(reflection, view), 0), m.ns) * m.ks[i] : 0;
 		intensity = ambient + diffuse + specular;
 		intensity = min(intensity, 1);
 		color[i] = 255 * intensity;
