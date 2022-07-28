@@ -19,14 +19,6 @@ sf::Color applyLighting(sf::Color c, float ambient, Vec4 normal, Vec4 light) {
 }
 
 
-float extremex = 0;
-float extremey = 0;
-float extremez = 0;
-Vec4 extremexp{0, 0, 0, 0};
-Vec4 extremeyp{ 0, 0, 0, 0 };
-Vec4 extremezp{ 0, 0, 0, 0 };
-
-
 void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec4 light) {
 	std::vector<sf::Vertex> vertexarray;
 
@@ -48,31 +40,12 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec4 light) {
 		Vector<4> pp1 = get2d(Transform*t.p1);
 		Vector<4> pp2 = get2d(Transform*t.p2);
 
+		if (std::min({ pp0[2], pp1[2], pp2[2] }) < 0.5)continue;
+
 		Mat4 maptoScreen = getScaleMatrix({ SCREEN_WIDTH / float(2), SCREEN_HEIGHT / float(2), 1 }) * getTranslateMatrix({ 1, 1, 0 });
 		pp0 = maptoScreen * pp0;
 		pp1 = maptoScreen * pp1;
 		pp2 = maptoScreen * pp2;
-		
-		//rasterize(triangle{ pp0, pp1, pp2, t.fillColor }, window, 1, cross_product, light, zbuffer);
-
-		Vec4 centre = { 0, 0, 0, 0 };
-		Vec4 vn0 = normalize( t.p0 - centre);
-		Vec4 vn1 = normalize( t.p1 - centre);
-		Vec4 vn2 = normalize( t.p2 - centre);
-
-
-		if (abs(t.p0[0]) > extremex) {
-			extremex = t.p0[0];
-			extremexp = t.p0;
-		}
-		if (abs(t.p0[1]) > extremey) {
-			extremey = t.p0[1];
-			extremeyp = t.p0;
-		}
-		if (abs(t.p0[2]) > extremez) {
-			extremez = t.p0[2];
-			extremezp = t.p0;
-		}
 
 		//rasterize
 
@@ -105,11 +78,17 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec4 light) {
 				if (depth >= zbuffer[i][j])continue;
 				zbuffer[i][j] = depth;
 
-				Vec4 normal = l0 * vn0 + l1 * vn1 + l2 * vn2;
+				Vec4 normal;
+				if (t.normals_present)
+					normal = l0 * t.n0 + l1 * t.n1 + l2 * t.n2;
+				else
+					normal = cross_product;
 
 				Vec4 vertexCoordinates = l0 * t.p0 + l1 * t.p1 + l2 * t.p2;
 				//sf::Color c = applyLighting(t.fillColor, 0.2, cross_product, light - vertexCoordinates);
-				sf::Color c = applyLighting2(light - vertexCoordinates, cross_product, cam.position - vertexCoordinates, 0.2, t.mtl);
+				//(normalize(cross_product) - normal).display();
+				
+				sf::Color c = applyLighting2(light - vertexCoordinates, normal, cam.position - vertexCoordinates, 0.2, t.mtl);
 				vertexarray.push_back(sf::Vertex{ sf::Vector2f{float(j), float(i)}, c });
 			}
 		}
@@ -122,11 +101,4 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec4 light) {
 	/*
 		rasterize(triangle{ pp0, pp1, pp2, t.fillColor }, window, 0.1, cross_product, {light - surfaceCenter}, zbuffer);
 		*/
-
-	/*std::cout << "Extreme x:";
-	extremexp.display();
-	std::cout << "Extreme y:";
-	extremeyp.display();
-	std::cout << "Extreme z:";
-	extremezp.display();*/
 }

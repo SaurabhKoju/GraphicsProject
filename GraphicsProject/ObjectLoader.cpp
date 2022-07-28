@@ -1,6 +1,7 @@
 #include "ObjectLoader.h"
 #include <map>
 #include <sstream>
+#include <algorithm>
 #include "GMath.h"
 
 mesh LoadObject(std::string mtl_file_path, std::string obj_file_path) {
@@ -22,7 +23,7 @@ mesh LoadObject(std::string mtl_file_path, std::string obj_file_path) {
 			std::string material_name;
 			iss >> material_name;
 			material m;
-			for (int i = 0; i < 9; i++) {
+			while(true) {
 				getline(mtl_file, line);
 				std::istringstream pss(line);
 				pss.str(line);
@@ -49,6 +50,7 @@ mesh LoadObject(std::string mtl_file_path, std::string obj_file_path) {
 
 
 	std::vector<Vec4> vertices;
+	std::vector<Vec4> normals;
 	material current_material = default_material;
 	while (std::getline(obj_file, line)) {
 		std::istringstream iss(line);
@@ -59,6 +61,11 @@ mesh LoadObject(std::string mtl_file_path, std::string obj_file_path) {
 			iss >> x >> y >> z;
 			vertices.push_back(Vec4{ x, y, z, 1 });
 		}
+		else if (first_token == "vn") {
+			float x, y, z;
+			iss >> x >> y >> z;
+			normals.push_back(Vec4{ x, y, z, 1 });
+		}
 		else if (first_token == "usemtl") {
 			std::string material_name;
 			iss >> material_name;
@@ -67,11 +74,29 @@ mesh LoadObject(std::string mtl_file_path, std::string obj_file_path) {
 		else if(first_token == "f") {
 			std::string v1, v2, v3;
 			iss >> v1 >> v2 >> v3;
-			v1 = v1.substr(0, v1.find("/"));
-			v2 = v2.substr(0, v2.find("/"));
-			v3 = v3.substr(0, v3.find("/"));
+			std::string x1 = v1.substr(0, v1.find("/"));
+			std::string x2 = v2.substr(0, v2.find("/"));
+			std::string x3 = v3.substr(0, v3.find("/"));
+			triangle t{vertices[stoi(x1)-1], vertices[stoi(x2)-1], vertices[stoi(x3)-1]};
 
-			triangle t{vertices[stoi(v1)-1], vertices[stoi(v2)-1], vertices[stoi(v3)-1]};
+			if (std::count(v1.begin(), v1.end(), '/') == 2) {
+				int first_pos = v1.find("/");
+				int second_pos = v1.find("/", first_pos + 1);
+
+				std::string n0 = v1.substr(second_pos + 1, v1.size() - second_pos - 1);
+
+				first_pos = v2.find("/");
+				second_pos = v2.find("/", first_pos + 1);
+				std::string n1 = v2.substr(second_pos + 1, v2.size() - second_pos - 1);
+
+				first_pos = v3.find("/");
+				second_pos = v3.find("/", first_pos + 1);
+				std::string n2 = v3.substr(second_pos + 1, v3.size() - second_pos - 1);
+				t.n0 = normals[stoi(n0) - 1];
+				t.n1 = normals[stoi(n1) - 1];
+				t.n2 = normals[stoi(n2) - 1];
+				t.normals_present = true;
+			}
 			t.mtl = current_material;
 			object.triangles.push_back(t);
 		}

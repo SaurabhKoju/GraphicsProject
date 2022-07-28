@@ -33,11 +33,14 @@ int main()
 
     Camera cam;
     cam.update({ 7, 7, 7, 1 }, {0.5, 0.5, 0.5, 1}); //for cube
-    //cam.update({ 0.299671, 1.34242, -4.89153, 1 }, { 0, 0, 0, 1 }); //for car
+    //cam.update({ -0.318587, - 2.03718, 4.94912, 1 }, { 0, 0, 0, 1 }); //for car and house
     Vec4 light = {4.5, 0.5, 4, 1};
 
     Cube = LoadObject("simplecube.mtl", "simplecube.obj");
     //Cube = LoadObject("exteriorCar.mtl", "exteriorCar.obj");
+    //Cube = LoadObject("casa.mtl", "casa.obj");
+    //Cube = LoadObject("mercedes.mtl", "mercedes.obj");
+    //Cube = LoadObject("mug.mtl", "mug.obj");
 
     Vec4 oldposition{ -1, -1, 1, 1 };
     Vec4 cubecentre{ 0, 0, 0 };
@@ -122,7 +125,7 @@ int main()
 
         // draw everything here...
 
-        Mat4 T = getRotationMatrix(cam.target, cam.position, 5 * theta);        
+        Mat4 T = getRotationMatrix(cam.position, cam.position+Vec4{0, 0, 1, 1}, 5 * theta);
         Cube.transform(T);
         draw(Cube, window, cam, light);
 

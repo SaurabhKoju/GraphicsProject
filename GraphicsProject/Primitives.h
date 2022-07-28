@@ -16,6 +16,7 @@ struct triangle {
 	Vector<4> p0, p1, p2;
 	sf::Color fillColor;
 	material mtl;
+	bool normals_present = false;
 	Vector<4> n0, n1, n2;
 };
 
