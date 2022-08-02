@@ -34,14 +34,29 @@ void Camera::moveDown(float time) {
 	position = position + v;
 	Camera::update(this->position, this->target);
 }
-void Camera::moveLeft(float time) {
+void Camera::rotateLeft(float time) {
 	Vec4 v = scale(this->right, {speed * time, speed * time, speed * time});
 	position = position - v;
 	Camera::update(this->position, this->target);
 }
-void Camera::moveRight(float time) {
+void Camera::rotateRight(float time) {
 	Vec4 v = scale(this->right, {speed * time, speed * time, speed * time});
 	position = position + v;
+	Camera::update(this->position, this->target);
+}
+
+
+void Camera::moveLeft(float time) {
+	Vec4 v = scale(this->right, { speed * time, speed * time, speed * time });
+	position = position - v;
+	target = target - v;
+	Camera::update(this->position, this->target);
+}
+
+void Camera::moveRight(float time) {
+	Vec4 v = scale(this->right, { speed * time, speed * time, speed * time });
+	position = position + v;
+	target = target + v;
 	Camera::update(this->position, this->target);
 }
 

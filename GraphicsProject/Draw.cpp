@@ -88,7 +88,7 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec4 light) {
 				//sf::Color c = applyLighting(t.fillColor, 0.2, cross_product, light - vertexCoordinates);
 				//(normalize(cross_product) - normal).display();
 				
-				sf::Color c = applyLighting2(light - vertexCoordinates, normal, cam.position - vertexCoordinates, 0.2, t.mtl);
+				sf::Color c = applyLighting2(light - vertexCoordinates, normal, cam.position - vertexCoordinates, 0.4, t.mtl);
 				vertexarray.push_back(sf::Vertex{ sf::Vector2f{float(j), float(i)}, c });
 			}
 		}

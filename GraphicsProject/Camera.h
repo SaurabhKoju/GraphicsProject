@@ -20,6 +20,8 @@ public:
 	void moveDown(float time);
 	void moveRight(float time);
 	void moveLeft(float time);
+	void rotateLeft(float time);
+	void rotateRight(float time);
 };
 
 Mat4 worldtoCam(Camera cam);

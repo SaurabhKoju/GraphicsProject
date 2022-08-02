@@ -6,7 +6,6 @@
 #include "Primitives.h"
 #include "ObjectLoader.h"
 #include <iostream>
-#include <cassert>
 
 
 int main()
@@ -14,34 +13,18 @@ int main()
     sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Cube");
     window.setFramerateLimit(60);
 
-    mesh Cube{ { 
-                {{0, 0, 0, 1}, {1, 0, 0, 1}, {1, 0, 1, 1}}, {{0, 0, 1, 1}, {0, 0, 0, 1}, {1, 0, 1, 1}},
-                {{0, 1, 0, 1}, {1, 1, 1, 1}, {1, 1, 0, 1}}, {{0, 1, 1, 1}, {1, 1, 1, 1}, {0, 1, 0, 1}},
-                {{1, 0, 1, 1}, {1, 1, 0, 1}, {1, 1, 1, 1}}, {{1, 0, 1, 1}, {1, 0, 0, 1}, {1, 1, 0, 1}},
-                {{0, 0, 1, 1}, {0, 1, 1, 1}, {0, 1, 0, 1}}, {{0, 0, 1, 1}, {0, 1, 0, 1}, {0, 0, 0, 1}},
-                {{0, 0, 0, 1}, {1, 1, 0, 1}, {1, 0, 0, 1}}, {{0, 0, 0, 1}, {0, 1, 0, 1}, {1, 1, 0, 1}},
-                {{0, 0, 1, 1}, {1, 0, 1, 1}, {1, 1, 1, 1}}, {{0, 0, 1, 1}, {1, 1, 1, 1}, {0, 1, 1, 1}}
-        } };
-
-    Cube.triangles[0].fillColor = sf::Color::Green; Cube.triangles[1].fillColor = sf::Color::Green;
-    Cube.triangles[2].fillColor = sf::Color::Blue; Cube.triangles[3].fillColor = sf::Color::Blue;
-    Cube.triangles[4].fillColor = sf::Color::Yellow; Cube.triangles[5].fillColor = sf::Color::Yellow;
-    Cube.triangles[6].fillColor = sf::Color::White; Cube.triangles[7].fillColor = sf::Color::White;
-    Cube.triangles[8].fillColor = sf::Color(255, 87, 51); Cube.triangles[9].fillColor = sf::Color(255, 87, 51);
-    Cube.triangles[10].fillColor = sf::Color::Red; Cube.triangles[11].fillColor = sf::Color::Red;
-
-
-    Camera cam;
-    cam.update({ 7, 7, 7, 1 }, {0.5, 0.5, 0.5, 1}); //for cube
-    //cam.update({ -0.318587, - 2.03718, 4.94912, 1 }, { 0, 0, 0, 1 }); //for car and house
-    Vec4 light = {4.5, 0.5, 4, 1};
-
-    Cube = LoadObject("simplecube.mtl", "simplecube.obj");
+    mesh Cube;
+    Cube = LoadObject("simplecube2.mtl", "simplecube.obj");
     //Cube = LoadObject("exteriorCar.mtl", "exteriorCar.obj");
     //Cube = LoadObject("casa.mtl", "casa.obj");
     //Cube = LoadObject("mercedes.mtl", "mercedes.obj");
-    //Cube = LoadObject("mug.mtl", "mug.obj");
+    //Cube = LoadObject("helli.mtl", "helli.obj");
 
+    Camera cam;
+    cam.update({ 7, 7, 7, 1 }, {0, 0, 0, 1}); //for cube
+    //cam.update({ -0.318587, - 2.03718, 4.94912, 1 }, { 0, 0, 0, 1 }); //for car and house
+
+    Vec4 light = {4.5, 0.5, 4, 1};
     Vec4 oldposition{ -1, -1, 1, 1 };
     Vec4 cubecentre{ 0, 0, 0 };
 
@@ -71,10 +54,14 @@ int main()
                     cam.ZoomIn(t);
                 else if(sf::Keyboard::isKeyPressed(sf::Keyboard::S))
                     cam.ZoomOut(t);
-                else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
                     cam.moveLeft(t);
-                else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+                else if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
                     cam.moveRight(t);
+                else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+                    cam.rotateLeft(t);
+                else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+                    cam.rotateRight(t);
                 else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
                     cam.moveUp(t);
                 else if(sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
@@ -121,26 +108,22 @@ int main()
                 oldposition = newposition;
             }
         }
-        window.clear(sf::Color::Black);
+        window.clear(sf::Color(50, 50, 50));
 
         // draw everything here...
 
-        Mat4 T = getRotationMatrix(cam.position, cam.position+Vec4{0, 0, 1, 1}, 5 * theta);
+        Mat4 T = getRotationMatrix(cubecentre, cubecentre+Vec4{0, 1, 0, 0}, 5 * theta);
         Cube.transform(T);
         draw(Cube, window, cam, light);
 
         Vec4 lightOrigin = worldtoScreen(cam, light);
         circle.setPosition(sf::Vector2f(lightOrigin[0], lightOrigin[1]));
-        //cam.position.display();
         window.draw(circle);
+        //cam.position.display();
 
         // end the current frame
         window.display();
     }
-    
-
-
-
 
     return 0;
 }
