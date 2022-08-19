@@ -4,13 +4,6 @@
 #include <algorithm>
 #include "GMath.h"
 
-class HashFunction {
-public:
-	size_t operator()(Vec4 v) const {
-		return (std::hash<int>()(int(v[0]))^ std::hash<int>()(int(v[1]))^ std::hash<int>()(int(v[2])));
-	}
-};
-
 mesh LoadObject(std::string mtl_file_path, std::string obj_file_path) {
 	mesh object;
 
@@ -59,8 +52,6 @@ mesh LoadObject(std::string mtl_file_path, std::string obj_file_path) {
 	std::vector<Vec4> vertices;
 	std::vector<Vec4> normals;
 	material current_material = default_material;
-	std::unordered_map<Vec4, Vec4, HashFunction> normal_map;
-	std::unordered_map<Vec4, int, HashFunction> count;
 	while (std::getline(obj_file, line)) {
 		std::istringstream iss(line);
 		std::string first_token;
@@ -106,41 +97,8 @@ mesh LoadObject(std::string mtl_file_path, std::string obj_file_path) {
 				t.n2 = normals[stoi(n2) - 1];
 				t.normals_present = true;
 			}
-			else {
-				Vec4 area_normal = (t.p1 - t.p0) * (t.p2 - t.p0);
-				if (normal_map.find(t.p0)!=normal_map.end()){
-					normal_map[t.p0] = area_normal;
-				}
-				else {
-					normal_map[t.p0]  = normal_map[t.p0] + area_normal;
-				}
-				count[t.p0]+=1;
-				if (normal_map.find(t.p1) != normal_map.end()) {
-					normal_map[t.p1] = area_normal;
-				}
-				else {
-					normal_map[t.p1] = normal_map[t.p1] + area_normal;
-				}
-				count[t.p1] += 1;
-				if (normal_map.find(t.p2) != normal_map.end()) {
-					normal_map[t.p2] = area_normal;
-				}
-				else {
-					normal_map[t.p2] = normal_map[t.p2] + area_normal;
-				}
-				count[t.p2] += 1;
-			}
 			t.mtl = current_material;
 			object.triangles.push_back(t);
-		}
-	}
-
-	for (triangle &t : object.triangles) {
-		if (!t.normals_present) {
-			t.n0 = normalize(normal_map[t.p0] / count[t.p0]);
-			t.n1 = normalize(normal_map[t.p1] / count[t.p1]);
-			t.n2 = normalize(normal_map[t.p2] / count[t.p2]);
-			t.normals_present = true;
 		}
 	}
 

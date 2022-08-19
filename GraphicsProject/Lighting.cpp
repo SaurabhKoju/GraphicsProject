@@ -1,6 +1,6 @@
 #include "Lighting.h"
 
-sf::Color applyLighting2(Vec4 light, Vec4 normal, Vec4 view, float ambientIntensity, material m) {
+sf::Color applyLighting(Vec4 light, Vec4 normal, Vec4 view, float ambientIntensity, material m) {
 	float mag = magnitudeSquared(light)/40;
 	light = normalize(light);
 	normal = normalize(normal);

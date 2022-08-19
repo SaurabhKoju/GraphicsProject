@@ -6,19 +6,6 @@
 
 const float INF = 1000000000;
 
-sf::Color applyLighting(sf::Color c, float ambient, Vec4 normal, Vec4 light) {
-
-	float ka  = 1;
-	float cosTheta = max((dot(normalize(normal), normalize(light))), 0)/magnitudeSquared(light);
-	return sf::Color(
-			min((float)c.r * (ambient * ka + cosTheta), 255),
-			min((float)c.g * (ambient * ka + cosTheta), 255),
-			min((float)c.b * (ambient * ka + cosTheta), 255),
-			c.a);
-
-}
-
-
 void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec4 light) {
 	std::vector<sf::Vertex> vertexarray;
 
@@ -40,7 +27,7 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec4 light) {
 		Vector<4> pp1 = get2d(Transform*t.p1);
 		Vector<4> pp2 = get2d(Transform*t.p2);
 
-		if (std::min({ pp0[2], pp1[2], pp2[2] }) < 0.5)continue;
+		if (std::min({ pp0[2], pp1[2], pp2[2] }) < 1)continue;
 
 		Mat4 maptoScreen = getScaleMatrix({ SCREEN_WIDTH / float(2), SCREEN_HEIGHT / float(2), 1 }) * getTranslateMatrix({ 1, 1, 0 });
 		pp0 = maptoScreen * pp0;
@@ -85,10 +72,8 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec4 light) {
 					normal = cross_product;
 
 				Vec4 vertexCoordinates = l0 * t.p0 + l1 * t.p1 + l2 * t.p2;
-				//sf::Color c = applyLighting(t.fillColor, 0.2, cross_product, light - vertexCoordinates);
-				//(normalize(cross_product) - normal).display();
 				
-				sf::Color c = applyLighting2(light - vertexCoordinates, normal, cam.position - vertexCoordinates, 0.4, t.mtl);
+				sf::Color c = applyLighting(light - vertexCoordinates, normal, cam.position - vertexCoordinates, 0.2, t.mtl);
 				vertexarray.push_back(sf::Vertex{ sf::Vector2f{float(j), float(i)}, c });
 			}
 		}
@@ -98,7 +83,4 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec4 light) {
 
 	if(vertexarray.size())
 		window.draw(&vertexarray[0], vertexarray.size(), sf::Points);
-	/*
-		rasterize(triangle{ pp0, pp1, pp2, t.fillColor }, window, 0.1, cross_product, {light - surfaceCenter}, zbuffer);
-		*/
 }

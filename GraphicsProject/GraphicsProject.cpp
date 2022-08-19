@@ -14,17 +14,13 @@ int main()
     window.setFramerateLimit(60);
 
     mesh Cube;
-    Cube = LoadObject("simplecube2.mtl", "simplecube.obj");
-    //Cube = LoadObject("exteriorCar.mtl", "exteriorCar.obj");
-    //Cube = LoadObject("casa.mtl", "casa.obj");
-    //Cube = LoadObject("mercedes.mtl", "mercedes.obj");
-    //Cube = LoadObject("helli.mtl", "helli.obj");
+    Cube = LoadObject("simple2.mtl", "simple2.obj");
 
     Camera cam;
     cam.update({ 7, 7, 7, 1 }, {0, 0, 0, 1}); //for cube
     //cam.update({ -0.318587, - 2.03718, 4.94912, 1 }, { 0, 0, 0, 1 }); //for car and house
 
-    Vec4 light = {4.5, 0.5, 4, 1};
+    Vec4 light = {4.5, 4.5, 7, 1};
     Vec4 oldposition{ -1, -1, 1, 1 };
     Vec4 cubecentre{ 0, 0, 0 };
 
@@ -119,6 +115,7 @@ int main()
         Vec4 lightOrigin = worldtoScreen(cam, light);
         circle.setPosition(sf::Vector2f(lightOrigin[0], lightOrigin[1]));
         window.draw(circle);
+        //light.display();
         //cam.position.display();
 
         // end the current frame
