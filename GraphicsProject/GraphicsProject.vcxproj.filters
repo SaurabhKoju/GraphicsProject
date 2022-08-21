@@ -71,9 +71,4 @@
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Object Include="simple2.obj">
-      <Filter>Resource Files</Filter>
-    </Object>
-  </ItemGroup>
 </Project>
