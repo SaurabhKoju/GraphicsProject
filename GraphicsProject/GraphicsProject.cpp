@@ -6,15 +6,16 @@
 #include "Primitives.h"
 #include "ObjectLoader.h"
 #include <iostream>
-
+const float INF = 1000000000;
 
 int main()
 {
     sf::RenderWindow window(sf::VideoMode(SCREEN_WIDTH, SCREEN_HEIGHT), "Cube");
     window.setFramerateLimit(60);
 
-    mesh Cube;
+    std::vector<mesh >Cube;
     Cube = LoadObject("simple2.mtl", "simple2.obj");
+    std::cout << Cube.size() << std::endl;
 
     Camera cam;
     cam.update({ 7, 7, 7, 1 }, {0, 0, 0, 1}); //for cube
@@ -33,6 +34,8 @@ int main()
     Vec4 lightOrigin = worldtoScreen(cam, light);
     circle.setOrigin(sf::Vector2f(2.5, 2.5));
     circle.setPosition(sf::Vector2f(lightOrigin[0], lightOrigin[1]));
+    std::vector<std::vector<float> > zbuffer(SCREEN_HEIGHT, std::vector<float>(SCREEN_WIDTH, INF));
+    std::vector<std::vector<Vec4> > nbuffer(SCREEN_HEIGHT, std::vector<Vec4>(SCREEN_WIDTH, Zero4));;
 
     while (window.isOpen())
     {
@@ -84,6 +87,40 @@ int main()
                     oldposition = { -1, -1, 1, 1 };
                 }
             }
+            else if (event.type == sf::Event::MouseButtonPressed && sf::Keyboard::isKeyPressed(sf::Keyboard::LControl)) {
+                std::cout << event.key.control << std::endl;
+                sf::Vector2i mouseposition = sf::Mouse::getPosition(window);
+                int i = mouseposition.x;
+                int j = mouseposition.y;
+                if (i < 0 || i >= SCREEN_WIDTH || j < 0 || j >= SCREEN_HEIGHT)continue;
+                Vec4 normal = nbuffer[j][i];
+                Mat4 T;
+                if (event.mouseButton.button == sf::Mouse::Left) {
+                    T = getRotationMatrix(cubecentre, cubecentre + normal, 90);
+                }
+                else {
+                    T = getRotationMatrix(cubecentre, cubecentre + normal, -90);
+                }
+                if (zbuffer[j][i] > 1 && zbuffer[j][i] < INF) {
+                    for (mesh& m : Cube) {
+                        bool flag = false;
+                        for (triangle t : m.triangles) {
+                            Vec4 v1 = t.p1 - t.p0;
+                            Vec4 v2 = t.p2 - t.p0;
+                            Vec4 cross_product = v1 * v2;
+                            if (magnitude(normal - normalize(cross_product)) < 0.0005 && t.mtl.name != "Material.001") {
+                                flag = true;
+                                material mat = t.mtl;
+                                std::cout << mat.name << std::endl;
+                                break;
+                            }
+                        }
+                        if (flag) {
+                            m.transform(T);
+                        }
+                    }
+                }
+            }
             else if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
                 sf::Vector2i mouseposition = sf::Mouse::getPosition(window);
                 Vec4 newposition{ mouseposition.x, mouseposition.y, 1, 1};
@@ -100,7 +137,8 @@ int main()
                 Vec4 axis = (world_oldposition - cubecentre) * (world_newposition - cubecentre);
 
                 Mat4 X = getRotationMatrix(cubecentre, cubecentre + axis, angle);
-                Cube.transform(X);
+                for(mesh &m:Cube)
+                    m.transform(X);
                 oldposition = newposition;
             }
         }
@@ -109,8 +147,15 @@ int main()
         // draw everything here...
 
         Mat4 T = getRotationMatrix(cubecentre, cubecentre+Vec4{0, 1, 0, 0}, 5 * theta);
-        Cube.transform(T);
-        draw(Cube, window, cam, light);
+        for(mesh &m:Cube)
+            m.transform(T);
+
+
+
+        zbuffer = std::vector<std::vector<float> >(SCREEN_HEIGHT, std::vector<float>(SCREEN_WIDTH, INF));
+        nbuffer = std::vector<std::vector<Vec4> >(SCREEN_HEIGHT, std::vector<Vec4>(SCREEN_WIDTH, Zero4));
+        for(mesh m:Cube)
+            draw(m, window, cam, light, zbuffer, nbuffer);
 
         Vec4 lightOrigin = worldtoScreen(cam, light);
         circle.setPosition(sf::Vector2f(lightOrigin[0], lightOrigin[1]));

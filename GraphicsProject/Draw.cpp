@@ -4,13 +4,12 @@
 #include <vector>
 #include "Lighting.h"
 
-const float INF = 1000000000;
 
-void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec4 light) {
+void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec4 light, std::vector<std::vector<float> > &zbuffer, std::vector<std::vector<Vec4> > &nbuffer) {
 	std::vector<sf::Vertex> vertexarray;
 
 
-	std::vector<std::vector<float> > zbuffer(SCREEN_HEIGHT, std::vector<float>(SCREEN_WIDTH, INF));
+	//std::vector<std::vector<float> > zbuffer(SCREEN_HEIGHT, std::vector<float>(SCREEN_WIDTH, INF));
 	Mat4 compressx = getScaleMatrix(Vec4{ aspect_ratio, 1, 1});
 	Mat4 translateCam = getTranslateMatrix(Zero4 - cam.position);
 	Mat4 camTransform = worldtoCam(cam);
@@ -70,6 +69,8 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec4 light) {
 					normal = l0 * t.n0 + l1 * t.n1 + l2 * t.n2;
 				else
 					normal = cross_product;
+
+				nbuffer[i][j] = normal;
 
 				Vec4 vertexCoordinates = l0 * t.p0 + l1 * t.p1 + l2 * t.p2;
 				

@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <string>
 #include "GMath.h"
 #include <SFML/Graphics.hpp>
 #define SCREEN_WIDTH 1280
@@ -8,6 +9,7 @@ const float aspect_ratio = float(SCREEN_HEIGHT) / SCREEN_WIDTH;
 
 struct material {
 	float ka[3], kd[3], ks[3], ns;
+	std::string name;
 };
 
 const material default_material = { {1, 1, 1}, {0.8, 0.8, 0.8}, {0.5, 0.5, 0.5}, 10 };

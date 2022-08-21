@@ -4,8 +4,9 @@
 #include <algorithm>
 #include "GMath.h"
 
-mesh LoadObject(std::string mtl_file_path, std::string obj_file_path) {
-	mesh object;
+std::vector<mesh> LoadObject(std::string mtl_file_path, std::string obj_file_path) {
+	std::vector<mesh> object;
+	mesh small_cube;
 
 
 	std::ifstream mtl_file(mtl_file_path);
@@ -23,6 +24,7 @@ mesh LoadObject(std::string mtl_file_path, std::string obj_file_path) {
 			std::string material_name;
 			iss >> material_name;
 			material m;
+			m.name = material_name;
 			while(true) {
 				getline(mtl_file, line);
 				std::istringstream pss(line);
@@ -71,6 +73,11 @@ mesh LoadObject(std::string mtl_file_path, std::string obj_file_path) {
 			iss >> material_name;
 			current_material = mtlmap[material_name];
 		}
+		else if (first_token == "o") {
+			if (!small_cube.triangles.size())continue;
+			object.push_back(small_cube);
+			small_cube = mesh();
+		}
 		else if(first_token == "f") {
 			std::string v1, v2, v3;
 			iss >> v1 >> v2 >> v3;
@@ -98,8 +105,13 @@ mesh LoadObject(std::string mtl_file_path, std::string obj_file_path) {
 				t.normals_present = true;
 			}
 			t.mtl = current_material;
-			object.triangles.push_back(t);
+			small_cube.triangles.push_back(t);
 		}
+	}
+
+	if (small_cube.triangles.size() != 0) {
+		object.push_back(small_cube);
+		small_cube = mesh();
 	}
 
 	return object;
