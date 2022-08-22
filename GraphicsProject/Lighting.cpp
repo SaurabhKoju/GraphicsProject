@@ -1,7 +1,7 @@
 #include "Lighting.h"
 
 sf::Color applyLighting(Vec4 light, Vec4 normal, Vec4 view, float ambientIntensity, material m) {
-	float attenuation = 1 + 0.045*magnitude(light) + 0.0075*magnitude(light);
+	float attenuation = 1 + 0.045*magnitude(light) + 0.0075*magnitudeSquared(light);
 	float luminosity = 1 / attenuation;
 	light = normalize(light);
 	normal = normalize(normal);

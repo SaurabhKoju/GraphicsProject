@@ -78,10 +78,7 @@ void draw(mesh M, sf::RenderWindow &window, Camera cam, Vec4 light, std::vector<
 				vertexarray.push_back(sf::Vertex{ sf::Vector2f{float(j), float(i)}, c });
 			}
 		}
-		
+		if (vertexarray.size())
+			window.draw(&vertexarray[0], vertexarray.size(), sf::Points);
 	}
-
-
-	if(vertexarray.size())
-		window.draw(&vertexarray[0], vertexarray.size(), sf::Points);
 }

@@ -109,7 +109,7 @@ int main()
                             Vec4 v1 = t.p1 - t.p0;
                             Vec4 v2 = t.p2 - t.p0;
                             Vec4 cross_product = v1 * v2;
-                            if (magnitude(normal - normalize(cross_product)) < 0.005 && t.mtl.name != "Material.001") {
+                            if (magnitude(normal - normalize(cross_product)) < 0.05 && t.mtl.name != "Material.001") {
                                 flag = true;
                                 rotating = true;
                                 break;
@@ -156,7 +156,7 @@ int main()
             float speed = rotate_angle/rotate_time;
             Mat4 T;
             angle += speed * t;
-            if (abs(angle) > 90) {
+            if (abs(angle) > 90){
                 angle -= speed * t;
                 T = getRotationMatrix(cubecentre, cubecentre + normal, rotate_angle - angle);
                 angle = 0;
