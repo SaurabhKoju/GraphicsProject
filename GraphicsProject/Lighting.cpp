@@ -1,7 +1,8 @@
 #include "Lighting.h"
 
 sf::Color applyLighting(Vec4 light, Vec4 normal, Vec4 view, float ambientIntensity, material m) {
-	float mag = magnitudeSquared(light)/40;
+	float attenuation = 1 + 0.045*magnitude(light) + 0.0075*magnitude(light);
+	float luminosity = 1 / attenuation;
 	light = normalize(light);
 	normal = normalize(normal);
 	view = normalize(view);
@@ -14,8 +15,8 @@ sf::Color applyLighting(Vec4 light, Vec4 normal, Vec4 view, float ambientIntensi
 	for (int i = 0; i < 3; i++) {
 		float intensity = 0;
 		float ambient = m.ka[i] * ambientIntensity;
-		float diffuse = max(dot(light, normal), 0) * m.kd[i] / mag;
-		float specular = diffuse > 0 ? pow(max(dot(reflection, view), 0), m.ns) * m.ks[i] / mag : 0;
+		float diffuse = max(dot(light, normal), 0) * m.kd[i] * luminosity;
+		float specular = diffuse > 0 ? pow(max(dot(reflection, view), 0), m.ns) * m.ks[i] * luminosity : 0;
 		//std::cout << specular << std::endl;
 		intensity = ambient + diffuse + specular;
 		final_intensity[i] = intensity;

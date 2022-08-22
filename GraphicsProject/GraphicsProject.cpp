@@ -17,10 +17,9 @@ int main()
     Cube = LoadObject("simple2.mtl", "simple2.obj");
 
     Camera cam;
-    cam.update({ 7, 7, 7, 1 }, {0, 0, 0, 1}); //for cube
-    //cam.update({ -0.318587, - 2.03718, 4.94912, 1 }, { 0, 0, 0, 1 }); //for car and house
+    cam.update({ 7, 7, 7, 1 }, {0, 0, 0, 1});
 
-    Vec4 light = {4.5, 4.5, 7, 1};
+    Vec4 light = {4.5, 4.5, 6.5, 1};
     Vec4 oldposition{ -1, -1, 1, 1 };
     Vec4 cubecentre{ 0, 0, 0 };
 
@@ -110,7 +109,7 @@ int main()
                             Vec4 v1 = t.p1 - t.p0;
                             Vec4 v2 = t.p2 - t.p0;
                             Vec4 cross_product = v1 * v2;
-                            if (magnitude(normal - normalize(cross_product)) < 0.0005 && t.mtl.name != "Material.001") {
+                            if (magnitude(normal - normalize(cross_product)) < 0.005 && t.mtl.name != "Material.001") {
                                 flag = true;
                                 rotating = true;
                                 break;
