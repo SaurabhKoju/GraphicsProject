@@ -64,7 +64,7 @@ float magnitude(Vec4);
 Mat4 getScaleMatrix(Vec4 s);
 Mat4 getTranslateMatrix(Vec4 t);
 Mat3 getTransformMatrix(Vec4 a, Vec4 b, Vec4 c);
-Mat4 getRotationMatrix(Vec4 tail, Vec4 head, float angle); //angle in degrees
+Mat4 getRotationMatrix(Vec4 p, Vec4 v, float angle); //angle in degrees
 Mat4 rotateAboutZ(float angle);
 Mat4 rotateAboutY(float angle);
 Mat4 rotateAboutX(float angle);

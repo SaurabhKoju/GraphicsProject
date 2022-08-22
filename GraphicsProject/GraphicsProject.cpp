@@ -134,7 +134,7 @@ int main()
                 float angle = magnitude(oldposition - newposition) * 0.2;
                 Vec4 axis = (world_oldposition - cubecentre) * (world_newposition - cubecentre);
 
-                Mat4 X = getRotationMatrix(cubecentre, cubecentre + axis, angle);
+                Mat4 X = getRotationMatrix(cubecentre, axis, angle);
                 for(mesh &m:Cube)
                     m.transform(X);
                 oldposition = newposition;
@@ -144,7 +144,7 @@ int main()
 
         // draw everything here...
 
-        Mat4 T = getRotationMatrix(cubecentre, cubecentre+Vec4{0, 1, 0, 0}, 5 * theta);
+        Mat4 T = getRotationMatrix(cubecentre, Vec4{0, 1, 0, 0}, 5 * theta);
         for(mesh &m:Cube)
             m.transform(T);
 
@@ -158,11 +158,11 @@ int main()
             angle += speed * t;
             if (abs(angle) > 90){
                 angle -= speed * t;
-                T = getRotationMatrix(cubecentre, cubecentre + normal, rotate_angle - angle);
+                T = getRotationMatrix(cubecentre, normal, rotate_angle - angle);
                 angle = 0;
                 rotating = false;
             }
-            else T = getRotationMatrix(cubecentre, cubecentre + normal, speed * t);
+            else T = getRotationMatrix(cubecentre, normal, speed * t);
             for (int i = 0; i < Cube.size(); i++) {
                 if (transform_cubes[i]) {
                     Cube[i].transform(T);

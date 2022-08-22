@@ -122,13 +122,12 @@ Mat4 rotateAboutX(float cosine, float sine) {
 		});
 }
 
-Mat4 getRotationMatrix(Vec4 tail, Vec4 head, float angle) {
-	Vec4 v = head - tail;
+Mat4 getRotationMatrix(Vec4 p, Vec4 v, float angle) {
 	if (v[1] == 0 && v[2] == 0) {
 		if (v[0] < 0) {
-			return getTranslateMatrix(tail) * rotateAboutX(-angle) * getTranslateMatrix(Vec4{ 0, 0, 0, 0 } - tail);
+			return getTranslateMatrix(p) * rotateAboutX(-angle) * getTranslateMatrix(Vec4{ 0, 0, 0, 0 } - p);
 		}
-		return getTranslateMatrix(tail) * rotateAboutX(angle)* getTranslateMatrix(Vec4{ 0, 0, 0, 0 } - tail);
+		return getTranslateMatrix(p) * rotateAboutX(angle)* getTranslateMatrix(Vec4{ 0, 0, 0, 0 } - p);
 	}
 	float Xanglecosine = v[1] / sqrt(v[1]*v[1] + v[2]*v[2]);
 	float Xanglesine = v[2] / sqrt(v[1]*v[1] + v[2]*v[2]);
@@ -139,5 +138,5 @@ Mat4 getRotationMatrix(Vec4 tail, Vec4 head, float angle) {
 	Mat4 Zrotate = rotateAboutZ(Zanglecosine, -Zanglesine);
 	Mat4 Zantirotate = rotateAboutZ(Zanglecosine, Zanglesine);
 
-	return getTranslateMatrix(tail) * Xantirotate * Zantirotate * rotateAboutX(angle) * Zrotate * Xrotate * getTranslateMatrix(Vec4{0, 0, 0, 0}-tail);
+	return getTranslateMatrix(p) * Xantirotate * Zantirotate * rotateAboutX(angle) * Zrotate * Xrotate * getTranslateMatrix(Vec4{0, 0, 0, 0}-p);
 }
