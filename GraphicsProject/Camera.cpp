@@ -61,28 +61,15 @@ void Camera::moveRight(float time) {
 }
 
 Mat4 worldtoCam(Camera cam) {
-	Mat3 rotate = inverse(getTransformMatrix(cam.right, cam.down, cam.look));
-	Mat4 ans = {
-		rotate.matrix[0][0], rotate.matrix[0][1], rotate.matrix[0][2], 0,
-		rotate.matrix[1][0], rotate.matrix[1][1], rotate.matrix[1][2], 0,
-		rotate.matrix[2][0], rotate.matrix[2][1], rotate.matrix[2][2], 0,
-		0, 0, 0, 1
-	};
-	return ans;
+	Mat4 ans = getTransformMatrix(cam.right, cam.down, cam.look);
+	return(transpose(ans));
 }
 
 Mat4 camtoWorld(Camera cam) {
-	Mat3 rotate = getTransformMatrix(cam.right, cam.down, cam.look);
-	Mat4 ans = {
-		rotate.matrix[0][0], rotate.matrix[0][1], rotate.matrix[0][2], 0,
-		rotate.matrix[1][0], rotate.matrix[1][1], rotate.matrix[1][2], 0,
-		rotate.matrix[2][0], rotate.matrix[2][1], rotate.matrix[2][2], 0,
-		0, 0, 0, 1
-	};
-	return ans;
+	return(getTransformMatrix(cam.right, cam.down, cam.look));
 }
 
-Mat4 screentoPort(Camera cam){
+Mat4 screentoWindow(Camera cam){
 	Mat4 expandx = getScaleMatrix(Vec4{ 1 / aspect_ratio, 1, 1, 1 });
 	Mat4 translateCam = getTranslateMatrix(cam.position);
 	Mat4 PortCam = expandx * getTranslateMatrix({ -1, -1, 0 }) * getScaleMatrix({ float(2) / SCREEN_WIDTH, float(2) / SCREEN_HEIGHT, 1 });

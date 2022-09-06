@@ -26,5 +26,5 @@ public:
 
 Mat4 worldtoCam(Camera cam);
 Mat4 camtoWorld(Camera cam);
-Mat4 screentoPort(Camera cam);
+Mat4 screentoWindow(Camera cam);
 Vec4 worldtoScreen(Camera cam, Vec4 x);

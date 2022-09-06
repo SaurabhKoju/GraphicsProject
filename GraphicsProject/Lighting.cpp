@@ -17,17 +17,11 @@ sf::Color applyLighting(Vec4 light, Vec4 normal, Vec4 view, float ambientIntensi
 		float ambient = m.ka[i] * ambientIntensity;
 		float diffuse = max(dot(light, normal), 0) * m.kd[i] * luminosity;
 		float specular = diffuse > 0 ? pow(max(dot(reflection, view), 0), m.ns) * m.ks[i] * luminosity : 0;
-		//std::cout << specular << std::endl;
 		intensity = ambient + diffuse + specular;
 		final_intensity[i] = intensity;
 	}
 	float ma  = std::max({ final_intensity[0], final_intensity[1], final_intensity[2] });
-	float scale;
-	if (ma <= 1) {
-		scale = 1;
-	}else{
-		scale = 1 / ma;
-	}
+	float scale = ma <= 1 ? 1 : 1 / ma;
 
 	for (int i = 0; i < 3; i++) {
 		final_intensity[i] *= scale;

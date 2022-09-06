@@ -123,7 +123,7 @@ int main()
                 sf::Vector2i mouseposition = sf::Mouse::getPosition(window);
                 Vec4 newposition{ mouseposition.x, mouseposition.y, 1, 1};
 
-                Mat4 T = screentoPort(cam);
+                Mat4 T = screentoWindow(cam);
 
                 if (oldposition[0] == -1 )oldposition = newposition;
                 if (oldposition == newposition)continue;
@@ -144,7 +144,7 @@ int main()
 
         // draw everything here...
 
-        Mat4 T = getRotationMatrix(cubecentre, Vec4{0, 1, 0, 0}, 5 * theta);
+        Mat4 T = getRotationMatrix(cubecentre, Vec4{1, 0, 0, 0}, 5 * theta);
         for(mesh &m:Cube)
             m.transform(T);
 
@@ -169,7 +169,6 @@ int main()
                 }
             }
         }
-
 
 
         zbuffer = std::vector<std::vector<float> >(SCREEN_HEIGHT, std::vector<float>(SCREEN_WIDTH, INF));

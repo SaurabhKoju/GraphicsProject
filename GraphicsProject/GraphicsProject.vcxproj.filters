@@ -67,8 +67,5 @@
     <None Include="GMath.inl">
       <Filter>Header Files</Filter>
     </None>
-    <None Include="simplecube.mtl">
-      <Filter>Resource Files</Filter>
-    </None>
   </ItemGroup>
 </Project>
